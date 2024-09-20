@@ -1,4 +1,4 @@
-const topBarCenterText = `VA3HDL - FN04ga`;
+const topBarCenterText = `XE1CPM - DL70ir`;
 // Menu items
 // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
 // The values are [color code, menu text, target link, scale factor, side],
@@ -35,14 +35,14 @@ const aURL = [
   [
     "2196F3",
     "WEATHER",
-    "https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=44.0157&lon=-79.4591&zoom=5",
+    "https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=20.0353&lon=-103.5681&zoom=7",
     "1",
     "R",
   ],
   [
     "2196F3",
     "WINDS",
-    "https://earth.nullschool.net/#current/wind/surface/level/orthographic=-78.79,44.09,3000",
+    "https://earth.nullschool.net/#current/wind/surface/level/orthographic=-106.55,21.15,3000",
     "1",
     "R",
   ],
@@ -57,8 +57,9 @@ const aURL = [
 const aIMG = [
   ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
   [
-    "LOCAL RADAR",
-    "https://radar.weather.gov/ridge/standard/KNQA_loop.gif",
+    "CAMS",
+    "https://webcamsdemexico.net/nuevovallarta1/live.jpg",
+    "https://webcamsdemexico.net/puertovallarta5/live.jpg",
   ],
   [
     "NOAA D-RAP",
@@ -70,27 +71,31 @@ const aIMG = [
     "https://www.heavens-above.com/orbitdisplay.aspx?icon=default&width=600&height=300&mode=M&satid=44909",
   ],
   [
-    "SATELLITE CAN",
-    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/can/EXTENT3/GOES16-CAN-EXTENT3-1125x560.gif",
+    "SATELLITE MX",
+    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/mex/EXTENT3/GOES16-MEX-EXTENT3-1000x1000.gif",
   ],
   [
     "SATELLITE CGL",
-    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/cgl/EXTENT3/GOES16-CGL-EXTENT3-600x600.gif",
+    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/CONUS/EXTENT3/GOES16-CONUS-EXTENT3-625x375.gif",
   ],
   [
     "LIGHTNING",
     "https://images.lightningmaps.org/blitzortung/america/index.php?animation=usa",
   ],
   [
-    "LIGHTNING LOCAL",
-    "https://www.blitzortung.org/en/Images/image_b_ny.png",
+    "SISMIC ACTIVITY",
+    "https://ds.iris.edu/seismon/views/eveday_big//imgs/topMap.eveday_big.gif",
   ],
   ["YOUTUBE EXAMPLE", "iframe|https://www.youtube.com/embed/fzPFaXAV_2Y?autoplay=1&mute=1"],
   [
-    "WEBSITE EXAMPLE",
-    "iframe|https://globe.adsbexchange.com/?airport=YYZ",
+    "HAMCLOCK",
+    "http://127.0.0.1:8080/get_capture.bmp",
   ],
-  ["VIDEO EXAMPLE", "https://himawari8.nict.go.jp/movie/720/20240611_pifd.mp4"],
+  ["TROPICAL ACTIVITY",
+      "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png",
+      "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png",
+      "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png",
+  ],
   ["HF PROPAGATION",
   "https://www.hamqsl.com/solar101vhf.php",
   "https://www.hamqsl.com/solar100sc.php",
@@ -98,4 +103,4 @@ const aIMG = [
 ];
 
 // Image rotation intervals in milliseconds per tile - If the line below is commented, all tiles will be rotated every 30000 milliseconds (30s)
-const tileDelay = [11200,10000,11000,10100,10200,10500,10300,10600,30400,60700,60900,10800];
+// const tileDelay = [11200,10000,11000,10100,10200,10500,10300,10600,10400,10700,10900,10800];
