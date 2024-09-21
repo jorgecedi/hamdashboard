@@ -55,51 +55,62 @@ const aURL = [
 // You can't add more items because there are only 12 placeholders on the dashboard
 // but you can replace the titles and the images with anything you want.
 const aIMG = [
-  ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
-  [
-    "CAMS",
-    "https://webcamsdemexico.net/nuevovallarta1/live.jpg",
-    "https://webcamsdemexico.net/puertovallarta5/live.jpg",
-  ],
-  [
-    "NOAA D-RAP",
-    "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png",
-  ],
-  [
-    "ISS & RS-44 POSITION",
-    "https://www.heavens-above.com/orbitdisplay.aspx?icon=iss&width=600&height=300&mode=M&satid=25544",
-    "https://www.heavens-above.com/orbitdisplay.aspx?icon=default&width=600&height=300&mode=M&satid=44909",
-  ],
-  [
-    "SATELLITE MX",
-    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/mex/EXTENT3/GOES16-MEX-EXTENT3-1000x1000.gif",
-  ],
-  [
-    "SATELLITE CGL",
-    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/CONUS/EXTENT3/GOES16-CONUS-EXTENT3-625x375.gif",
-  ],
-  [
-    "LIGHTNING",
-    "https://images.lightningmaps.org/blitzortung/america/index.php?animation=usa",
-  ],
-  [
-    "SISMIC ACTIVITY",
-    "https://ds.iris.edu/seismon/views/eveday_big//imgs/topMap.eveday_big.gif",
-  ],
-  ["YOUTUBE EXAMPLE", "iframe|https://www.youtube.com/embed/fzPFaXAV_2Y?autoplay=1&mute=1"],
-  [
-    "HAMCLOCK",
-    "http://127.0.0.1:8080/get_capture.bmp",
-  ],
-  ["TROPICAL ACTIVITY",
-      "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png",
-      "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png",
-      "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png",
-  ],
-  ["HF PROPAGATION",
-  "https://www.hamqsl.com/solar101vhf.php",
-  "https://www.hamqsl.com/solar100sc.php",
-  "https://www.hamqsl.com/solarpich.php"],
+    [
+        "RADAR",
+        "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"
+    ],
+    [
+        "CAMS",
+        "https://webcamsdemexico.net/nuevovallarta1/live.jpg",
+        "https://webcamsdemexico.net/puertovallarta5/live.jpg",
+        "https://webcamsdemexico.net/puertovallarta4/live.jpg",
+        "https://webcamsdemexico.net/puertovallarta6/live.jpg",
+    ],
+    [
+        "NOAA D-RAP",
+        "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png",
+    ],
+    [
+        "ISS & RS-44 POSITION",
+        "https://www.heavens-above.com/orbitdisplay.aspx?icon=iss&width=600&height=300&mode=M&satid=25544",
+        "https://www.heavens-above.com/orbitdisplay.aspx?icon=default&width=600&height=300&mode=M&satid=44909",
+    ],
+    [
+        "SATELLITE MX",
+        "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/mex/EXTENT3/GOES16-MEX-EXTENT3-1000x1000.gif",
+    ],
+    [
+        "SATELLITE CGL",
+        "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/CONUS/EXTENT3/GOES16-CONUS-EXTENT3-625x375.gif",
+    ],
+    [
+        "LIGHTNING",
+        "https://images.lightningmaps.org/blitzortung/america/index.php?animation=usa",
+    ],
+    [
+        "SISMIC ACTIVITY",
+        "https://ds.iris.edu/seismon/views/eveday_big//imgs/topMap.eveday_big.gif",
+    ],
+    [
+        "GREY LINE",
+        "https://www.timeanddate.com/scripts/sunmap.php?iso=now"
+    ],
+    [
+        "HAMCLOCK",
+        "http://127.0.0.1:8080/get_capture.bmp",
+    ],
+    [
+        "TROPICAL ACTIVITY",
+        "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png",
+        "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png",
+        "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png",
+    ],
+    [
+        "HF PROPAGATION",
+        "https://www.hamqsl.com/solar101vhf.php",
+        "https://www.hamqsl.com/solar100sc.php",
+        "https://www.hamqsl.com/solarpich.php",
+    ],
 ];
 
 // Image rotation intervals in milliseconds per tile - If the line below is commented, all tiles will be rotated every 30000 milliseconds (30s)
