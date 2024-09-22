@@ -39,10 +39,19 @@ const aURL = [
     "1",
     "R",
   ],
+    /*
   [
     "2196F3",
     "WINDS",
     "https://earth.nullschool.net/#current/wind/surface/level/orthographic=-106.55,21.15,3000",
+    "1",
+    "R",
+  ],
+  */
+  [
+    "2196F3",
+    "WINDS",
+    "https://www.windy.com/?17.738,-105.029,6",
     "1",
     "R",
   ],
