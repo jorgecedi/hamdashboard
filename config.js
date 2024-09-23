@@ -97,8 +97,14 @@ const aIMG = [
         "https://www.timeanddate.com/scripts/sunmap.php?iso=now"
     ],
     [
+        /*
         "HAMCLOCK",
         "http://127.0.0.1:8080/get_capture.bmp",
+        */
+       "SUN",
+       "https://soho.nascom.nasa.gov/data/LATEST/current_eit_304small.gif",
+       "https://soho.nascom.nasa.gov/data/LATEST/current_eit_195small.gif",
+       "https://soho.nascom.nasa.gov/data/LATEST/current_c2small.gif",
     ],
     [
         "TROPICAL ACTIVITY",
