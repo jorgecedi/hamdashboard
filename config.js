@@ -57,7 +57,8 @@ const aURL = [
 const aIMG = [
     [
         "RADAR",
-        "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"
+        // "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"
+        "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/mex/13/GOES16-MEX-13-1000x1000.gif",
     ],
     [
         "CAMS",
