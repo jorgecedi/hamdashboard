@@ -113,7 +113,7 @@ const aIMG = [
         "TROPICAL ACTIVITY",
         "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png",
         "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png",
-        "https://www.nhc.noaa.gov/xgtwo/two_pac_5d0.png",
+        // "https://www.nhc.noaa.gov/xgtwo/two_pac_5d0.png",
         "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png",
     ],
     [
