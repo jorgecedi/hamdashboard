@@ -48,6 +48,9 @@ const aURL = [
   ],
 ];
 
+const utcNow = new Date();
+const utcHour = utcNow.toISOString().slice(11, 13);
+
 // Dashboard items
 // Structure is Title, Image Source URL
 // [Title, Image Source URL],
@@ -104,15 +107,17 @@ const aIMG = [
         "HAMCLOCK",
         "http://127.0.0.1:8080/get_capture.bmp",
         */
-       "SUN",
-       "https://soho.nascom.nasa.gov/data/LATEST/current_eit_304small.gif",
-       "https://soho.nascom.nasa.gov/data/LATEST/current_eit_195small.gif",
-       "https://soho.nascom.nasa.gov/data/LATEST/current_c2small.gif",
+       //"SUN",
+       //"https://soho.nascom.nasa.gov/data/LATEST/current_eit_304small.gif",
+       //"https://soho.nascom.nasa.gov/data/LATEST/current_eit_195small.gif",
+       //"https://soho.nascom.nasa.gov/data/LATEST/current_c2small.gif",
+       " ",
+       "https://img.propagation.dr2w.de/n-america/10M/dr2w_10M_" + utcHour + ".png"
     ],
     [
         "TROPICAL ACTIVITY",
         "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png",
-        "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png",
+        // "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png",
         // "https://www.nhc.noaa.gov/xgtwo/two_pac_5d0.png",
         "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png",
     ],
