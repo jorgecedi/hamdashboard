@@ -68,7 +68,8 @@ const aIMG = [
         "https://webcamsdemexico.net/nuevovallarta1/live.jpg",
         "https://webcamsdemexico.net/puertovallarta5/live.jpg",
         "https://webcamsdemexico.net/puertovallarta4/live.jpg",
-        "https://webcamsdemexico.net/puertovallarta6/live.jpg",
+        // Not working any more
+        //"https://webcamsdemexico.net/puertovallarta6/live.jpg",
     ],
     [
         "NOAA D-RAP",
