@@ -113,7 +113,9 @@ const aIMG = [
        //"https://soho.nascom.nasa.gov/data/LATEST/current_eit_195small.gif",
        //"https://soho.nascom.nasa.gov/data/LATEST/current_c2small.gif",
        " ",
-       "https://img.propagation.dr2w.de/n-america/10M/dr2w_10M_" + utcHour + ".png"
+       "https://img.propagation.dr2w.de/n-america/10M/dr2w_10M_" + utcHour + ".png",
+       "https://img.propagation.dr2w.de/n-america/20M/dr2w_20M_" + utcHour + ".png",
+       "https://img.propagation.dr2w.de/n-america/40M/dr2w_40M_" + utcHour + ".png",
     ],
     [
         "TROPICAL ACTIVITY",
