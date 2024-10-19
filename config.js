@@ -97,8 +97,8 @@ const aIMG = [
         "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/CONUS/EXTENT3/GOES16-CONUS-EXTENT3-625x375.gif",
     ],
     [
-        "LIGHTNING",
-        "https://images.lightningmaps.org/blitzortung/america/index.php?animation=usa",
+        "STUDY",
+        "iframe|https://www.youtube.com/embed/jfKfPfyJRdk?si=lkUEjHeMrztlEVk4&autoplay=1&mute=1",
     ],
     [
         "SISMIC ACTIVITY",
@@ -138,4 +138,4 @@ const aIMG = [
 ];
 
 // Image rotation intervals in milliseconds per tile - If the line below is commented, all tiles will be rotated every 30000 milliseconds (30s)
-const tileDelay = [3600000,10000,11000,7200000,3600000,3600000,10300,10600,10400,3600000,10900,10800];
+const tileDelay = [3600000,10000,11000,7200000,3600000,3600000,7200000,10600,10400,3600000,10900,10800];
