@@ -1,0 +1,6 @@
+name = "emergency-weather-dashboard-feeds"
+main = "src/index.ts"
+compatibility_date = "2026-05-29"
+
+[vars]
+CACHE_SECONDS = "180"
