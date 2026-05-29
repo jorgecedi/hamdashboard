@@ -20,9 +20,5 @@ export function mergeConfig(base: DashboardConfig, overrides: DashboardOverrides
     merged.feeds = merged.feeds.map((feed) => ({ ...feed, ...byId.get(feed.id), id: feed.id }));
   }
 
-  if (overrides.tileRotationSeconds !== undefined && Number.isFinite(overrides.tileRotationSeconds) && overrides.tileRotationSeconds > 0) {
-    merged.tiles = merged.tiles.map((tile) => ({ ...tile, refreshSeconds: overrides.tileRotationSeconds as number }));
-  }
-
   return merged;
 }

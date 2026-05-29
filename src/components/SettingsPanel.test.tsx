@@ -13,17 +13,27 @@ describe("SettingsPanel", () => {
     fireEvent.change(screen.getByLabelText(/worker endpoint/i), { target: { value: "https://feeds.example.workers.dev/api" } });
     fireEvent.click(screen.getByRole("button", { name: /save settings/i }));
 
-    expect(onSave).toHaveBeenCalledWith({ workerEndpoint: "https://feeds.example.workers.dev/api", tileRotationSeconds: 3600 });
+    expect(onSave).toHaveBeenCalledWith({
+      workerEndpoint: "https://feeds.example.workers.dev/api",
+      tiles: defaultConfig.tiles.map((tile) => ({ id: tile.id, refreshSeconds: tile.refreshSeconds })),
+    });
   });
 
-  it("saves global tile rotation seconds overrides", () => {
+  it("saves per-tile rotation seconds overrides", () => {
     const onSave = vi.fn();
     render(<SettingsPanel config={defaultConfig} onSave={onSave} onReset={vi.fn()} />);
 
-    fireEvent.change(screen.getByLabelText(/tile rotation seconds/i), { target: { value: "45" } });
+    fireEvent.change(screen.getByLabelText(/radar rotation seconds/i), { target: { value: "1800" } });
+    fireEvent.change(screen.getByLabelText(/live video rotation seconds/i), { target: { value: "3600" } });
     fireEvent.click(screen.getByRole("button", { name: /save settings/i }));
 
-    expect(onSave).toHaveBeenCalledWith({ workerEndpoint: "/api", tileRotationSeconds: 45 });
+    expect(onSave).toHaveBeenCalledWith({
+      workerEndpoint: "/api",
+      tiles: expect.arrayContaining([
+        { id: "radar", refreshSeconds: 1800 },
+        { id: "live-video", refreshSeconds: 3600 },
+      ]),
+    });
   });
 
   it("calls reset", () => {

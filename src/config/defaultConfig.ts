@@ -36,7 +36,10 @@ export const defaultConfig: DashboardConfig = {
       group: "weather",
       refreshSeconds: 3600,
       enabled: true,
-      sources: [{ kind: "image", url: "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/mex/13/GOES16-MEX-13-1000x1000.gif" }],
+      sources: [
+        { kind: "image", url: "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/mex/13/GOES16-MEX-13-1000x1000.gif" },
+        { kind: "image", url: "https://cdn.star.nesdis.noaa.gov/GOES19/ABI/SECTOR/GA/13/GOES19-GA-13-1000x1000.gif" },
+      ],
     },
     {
       id: "cams",

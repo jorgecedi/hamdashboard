@@ -32,11 +32,16 @@ describe("mergeConfig", () => {
     expect(merged.tiles.find((tile) => tile.id === "missing")).toBeUndefined();
   });
 
-  it("applies a global tile rotation override to every tile", () => {
+  it("keeps per-tile rotation overrides independent", () => {
     const merged = mergeConfig(defaultConfig, {
-      tileRotationSeconds: 45,
+      tiles: [
+        { id: "radar", refreshSeconds: 1800 },
+        { id: "live-video", refreshSeconds: 3600 },
+      ],
     });
 
-    expect(merged.tiles.every((tile) => tile.refreshSeconds === 45)).toBe(true);
+    expect(merged.tiles.find((tile) => tile.id === "radar")?.refreshSeconds).toBe(1800);
+    expect(merged.tiles.find((tile) => tile.id === "live-video")?.refreshSeconds).toBe(3600);
+    expect(merged.tiles.find((tile) => tile.id === "cams")?.refreshSeconds).toBe(10);
   });
 });

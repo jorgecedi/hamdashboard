@@ -43,7 +43,6 @@ export type DashboardConfig = {
 };
 
 export type DashboardOverrides = Partial<Pick<DashboardConfig, "workerEndpoint" | "socialMonitoringEnabled" | "urgencyKeywords">> & {
-  tileRotationSeconds?: number;
   tiles?: Array<Partial<DashboardTile> & { id: string }>;
   feeds?: Array<Partial<FeedSource> & { id: string }>;
 };
