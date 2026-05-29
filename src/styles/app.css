@@ -20,3 +20,58 @@ body {
   min-height: 100vh;
   padding: 24px;
 }
+
+.feed-panel {
+  min-width: 0;
+  padding: 12px;
+  background: #111820;
+  border: 1px solid #2b3948;
+  border-radius: 8px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.feed-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.feed-item {
+  padding: 10px;
+  border-left: 4px solid #667085;
+  background: #0b1017;
+}
+
+.feed-item a {
+  color: #f5f7fb;
+  font-weight: 700;
+}
+
+.feed-item p {
+  margin: 6px 0;
+  color: #b8c3cf;
+}
+
+.feed-item-urgent {
+  border-color: #ef4444;
+  background: #241010;
+}
+
+.feed-item-watch {
+  border-color: #f59e0b;
+}
+
+.source-error {
+  color: #fca5a5;
+}
