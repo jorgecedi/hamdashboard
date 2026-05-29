@@ -47,11 +47,7 @@ export const defaultConfig: DashboardConfig = {
       group: "local",
       refreshSeconds: 10,
       enabled: true,
-      sources: [
-        { kind: "image", url: "https://webcamsdemexico.net/nuevovallarta1/live.jpg" },
-        { kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" },
-        { kind: "image", url: "https://webcamsdemexico.net/puertovallarta4/live.jpg" },
-      ],
+      sources: [{ kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" }],
     },
     {
       id: "tropical",

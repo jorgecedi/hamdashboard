@@ -2,6 +2,12 @@ import { describe, expect, it } from "vitest";
 import { defaultConfig } from "./defaultConfig";
 
 describe("defaultConfig", () => {
+  it("uses only the Puerto Vallarta 5 webcam for the cams tile", () => {
+    const cams = defaultConfig.tiles.find((tile) => tile.id === "cams");
+
+    expect(cams?.sources).toEqual([{ kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" }]);
+  });
+
   it("includes the GOES19 source in the radar tile", () => {
     const radar = defaultConfig.tiles.find((tile) => tile.id === "radar");
 
