@@ -4,13 +4,11 @@ import { describe, expect, it } from "vitest";
 import { App } from "./App";
 
 describe("App", () => {
-  it("renders the scaffold dashboard heading", () => {
+  it("renders the dashboard shell", async () => {
     render(<App />);
 
-    expect(
-      screen.getByRole("heading", {
-        name: /XE1CPM Emergency Weather Dashboard/i,
-      }),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/XE1CPM - DL70ir/i)).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: /dashboard tiles/i })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: /emergency and news feed/i })).toBeInTheDocument();
   });
 });
