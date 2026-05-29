@@ -73,6 +73,17 @@ export const defaultConfig: DashboardConfig = {
         { kind: "image", url: `https://img.propagation.dr2w.de/n-america/40M/dr2w_40M_${utcHour}.png` },
       ],
     },
+    {
+      id: "live-video",
+      title: "Live Video",
+      group: "news",
+      refreshSeconds: 600,
+      enabled: true,
+      sources: [
+        { kind: "iframe", url: "https://www.youtube.com/embed/5boZ1Vw95OU" },
+        { kind: "iframe", url: "https://www.youtube.com/embed/roYcxYa6izQ" },
+      ],
+    },
   ],
   feeds: [
     {
