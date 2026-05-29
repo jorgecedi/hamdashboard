@@ -34,9 +34,12 @@ export function Tile({ tile }: TileProps) {
   }, [source?.kind, tile.refreshSeconds, tile.sources.length]);
 
   if (!source) return null;
+  const tileClassName = ["tile", expanded ? "tile-expanded" : "", expanded && source.kind === "image" ? "tile-expanded-image" : ""]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <article className={expanded ? "tile tile-expanded" : "tile"}>
+    <article className={tileClassName}>
       <header className="tile-header">
         <h3>{tile.title}</h3>
         <div className="tile-actions">

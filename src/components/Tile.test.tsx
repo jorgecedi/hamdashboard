@@ -48,6 +48,7 @@ describe("Tile", () => {
 
     expect(screen.getByAltText("Cams")).toHaveClass("tile-media-image");
     expect(screen.getByRole("article")).toHaveClass("tile-expanded");
+    expect(screen.getByRole("article")).toHaveClass("tile-expanded-image");
   });
 
   it("rotates sources on next click", () => {
