@@ -51,6 +51,26 @@ describe("Tile", () => {
     expect(screen.getByRole("article")).toHaveClass("tile-expanded-image");
   });
 
+  it("toggles fullscreen when clicking the tile", () => {
+    render(<Tile tile={tile} />);
+    const article = screen.getByRole("article");
+
+    fireEvent.click(article);
+    expect(article).toHaveClass("tile-expanded");
+
+    fireEvent.click(article);
+    expect(article).not.toHaveClass("tile-expanded");
+  });
+
+  it("does not toggle fullscreen when clicking the next source button", () => {
+    render(<Tile tile={tile} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /next source/i }));
+
+    expect(screen.getByRole("article")).not.toHaveClass("tile-expanded");
+    expect(screen.getByAltText("Cams")).toHaveAttribute("src", expect.stringContaining("two.jpg"));
+  });
+
   it("rotates sources on next click", () => {
     render(<Tile tile={tile} />);
     fireEvent.click(screen.getByRole("button", { name: /next source/i }));

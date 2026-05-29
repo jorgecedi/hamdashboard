@@ -1,5 +1,5 @@
 import { Maximize2, RotateCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useState } from "react";
 import type { DashboardTile } from "../config/types";
 
 type TileProps = {
@@ -22,6 +22,16 @@ export function Tile({ tile }: TileProps) {
     setCacheKey((current) => current + 1);
   }
 
+  function handleNextSource(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    advanceSource();
+  }
+
+  function handleExpandButton(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    setExpanded(!expanded);
+  }
+
   useEffect(() => {
     if (tile.sources.length === 0 || tile.refreshSeconds <= 0) return;
     if (tile.sources.length <= 1 && source?.kind !== "image") return;
@@ -39,14 +49,14 @@ export function Tile({ tile }: TileProps) {
     .join(" ");
 
   return (
-    <article className={tileClassName}>
+    <article className={tileClassName} onClick={() => setExpanded((current) => !current)}>
       <header className="tile-header">
         <h3>{tile.title}</h3>
         <div className="tile-actions">
-          <button type="button" aria-label="Next source" onClick={advanceSource}>
+          <button type="button" aria-label="Next source" onClick={handleNextSource}>
             <RotateCw size={16} />
           </button>
-          <button type="button" aria-label="Expand tile" onClick={() => setExpanded(!expanded)}>
+          <button type="button" aria-label="Expand tile" onClick={handleExpandButton}>
             <Maximize2 size={16} />
           </button>
         </div>
