@@ -26,6 +26,28 @@ describe("scoreUrgency", () => {
     ).toBe("watch");
   });
 
+  it("does not double-count accented duplicate keyword matches", () => {
+    expect(
+      scoreUrgency({
+        title: "Inundación reportada en zona baja",
+        summary: "",
+        sourcePriority: 3,
+        keywords: ["inundacion", "inundación"],
+      }),
+    ).toBe("watch");
+  });
+
+  it("marks two distinct lower-priority keyword matches urgent", () => {
+    expect(
+      scoreUrgency({
+        title: "Flood evacuation notices issued",
+        summary: "",
+        sourcePriority: 3,
+        keywords,
+      }),
+    ).toBe("urgent");
+  });
+
   it("marks unrelated items normal", () => {
     expect(
       scoreUrgency({

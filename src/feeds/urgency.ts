@@ -13,7 +13,8 @@ function normalizeText(value: string): string {
 
 export function scoreUrgency(input: ScoreUrgencyInput): Urgency {
   const haystack = normalizeText(`${input.title} ${input.summary ?? ""}`);
-  const matches = input.keywords.filter((keyword) => haystack.includes(normalizeText(keyword)));
+  const normalizedKeywords = [...new Set(input.keywords.map((keyword) => normalizeText(keyword)))];
+  const matches = normalizedKeywords.filter((keyword) => haystack.includes(keyword));
 
   if (matches.length === 0) return "normal";
   if (input.sourcePriority >= 8 || matches.length >= 2) return "urgent";
