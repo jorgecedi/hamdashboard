@@ -30,4 +30,21 @@ describe("defaultConfig", () => {
       { kind: "iframe", url: "https://www.youtube.com/embed/roYcxYa6izQ" },
     ]);
   });
+
+  it("includes Puerto Vallarta and Mexico official feed sources", () => {
+    expect(defaultConfig.feeds).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "smn-conagua-alerts",
+          name: "SMN CONAGUA Alerts",
+          url: "https://correo1.conagua.gob.mx/feedsmn/feedalert.aspx",
+        }),
+        expect.objectContaining({
+          id: "vallarta-daily-pv",
+          name: "Vallarta Daily Puerto Vallarta",
+          url: "https://www.vallartadaily.com/category/puerto-vallarta-news/feed/",
+        }),
+      ]),
+    );
+  });
 });

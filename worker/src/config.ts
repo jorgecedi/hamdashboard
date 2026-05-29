@@ -21,6 +21,26 @@ export const workerFeedSources: WorkerFeedSource[] = [
     enabled: true,
     tags: ["official", "huracan", "pacifico"],
   },
+  {
+    id: "smn-conagua-alerts",
+    name: "SMN CONAGUA Alerts",
+    category: "weather",
+    kind: "rss",
+    url: "https://correo1.conagua.gob.mx/feedsmn/feedalert.aspx",
+    priority: 9,
+    enabled: true,
+    tags: ["official", "mexico", "weather"],
+  },
+  {
+    id: "vallarta-daily-pv",
+    name: "Vallarta Daily Puerto Vallarta",
+    category: "local",
+    kind: "rss",
+    url: "https://www.vallartadaily.com/category/puerto-vallarta-news/feed/",
+    priority: 4,
+    enabled: true,
+    tags: ["local", "puerto-vallarta", "news"],
+  },
 ];
 
 export const urgencyKeywords = [

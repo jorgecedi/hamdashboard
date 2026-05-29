@@ -14,7 +14,7 @@ describe("worker", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toBe("application/json; charset=utf-8");
     expect(response.headers.get("access-control-allow-origin")).toBe("*");
-    expect(await response.json()).toMatchObject({ ok: true, cacheSeconds: 90, sourceCount: 2 });
+    expect(await response.json()).toMatchObject({ ok: true, cacheSeconds: 90, sourceCount: 4 });
   });
 
   it("returns 404 for unknown routes", async () => {

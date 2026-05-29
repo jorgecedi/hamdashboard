@@ -171,6 +171,11 @@ body {
   border: 0;
 }
 
+.tile-expanded .tile-media-image {
+  object-fit: contain;
+  background: #05070a;
+}
+
 @media (max-width: 900px) {
   .dashboard-shell {
     height: auto;
