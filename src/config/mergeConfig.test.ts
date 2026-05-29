@@ -31,4 +31,12 @@ describe("mergeConfig", () => {
 
     expect(merged.tiles.find((tile) => tile.id === "missing")).toBeUndefined();
   });
+
+  it("applies a global tile rotation override to every tile", () => {
+    const merged = mergeConfig(defaultConfig, {
+      tileRotationSeconds: 45,
+    });
+
+    expect(merged.tiles.every((tile) => tile.refreshSeconds === 45)).toBe(true);
+  });
 });
