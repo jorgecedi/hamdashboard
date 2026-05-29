@@ -1,8 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { fetchFeeds } from "./feedClient";
 
 describe("fetchFeeds", () => {
-  beforeEach(() => vi.restoreAllMocks());
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
 
   it("fetches normalized Worker feeds", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ items: [], statuses: [] }), { status: 200 })));
