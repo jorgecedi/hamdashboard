@@ -40,6 +40,18 @@ describe("parseXmlFeed", () => {
       },
     ]);
   });
+
+  it("normalizes HTML markup and entities in XML feed text", () => {
+    const xml = `<rss><channel><item><title><![CDATA[<b>Storm&nbsp;update</b> &amp; watch]]></title><link>https://example.com/html</link><description><![CDATA[<p>Puerto&nbsp;Vallarta<br>rain &amp; wind</p>]]></description></item></channel></rss>`;
+
+    expect(parseXmlFeed(xml)).toEqual([
+      {
+        title: "Storm update & watch",
+        url: "https://example.com/html",
+        summary: "Puerto Vallarta rain & wind",
+      },
+    ]);
+  });
 });
 
 describe("parseJsonFeed", () => {
@@ -83,6 +95,26 @@ describe("parseJsonFeed", () => {
         url: "https://example.com/fallback",
         summary: "Flood update",
         publishedAt: "2026-05-29T14:00:00Z",
+      },
+    ]);
+  });
+
+  it("normalizes HTML markup and entities in JSON feed text", () => {
+    const json = JSON.stringify({
+      items: [
+        {
+          title: "<strong>Local&nbsp;alert</strong>",
+          url: "https://example.com/json-html",
+          summary: "<p>Flood &amp; surge</p>",
+        },
+      ],
+    });
+
+    expect(parseJsonFeed(json)).toEqual([
+      {
+        title: "Local alert",
+        url: "https://example.com/json-html",
+        summary: "Flood & surge",
       },
     ]);
   });
