@@ -1,0 +1,99 @@
+import type { DashboardConfig } from "./types";
+
+const utcHour = new Date().toISOString().slice(11, 13);
+
+export const defaultConfig: DashboardConfig = {
+  site: {
+    title: "Emergency Weather Dashboard",
+    callSign: "XE1CPM - DL70ir",
+    locationName: "Puerto Vallarta, Jalisco",
+    timezone: "America/Bahia_Banderas",
+    language: "en",
+  },
+  workerEndpoint: "/api",
+  socialMonitoringEnabled: false,
+  urgencyKeywords: [
+    "huracan",
+    "huracán",
+    "tormenta tropical",
+    "Puerto Vallarta",
+    "Jalisco",
+    "evacuacion",
+    "evacuación",
+    "inundacion",
+    "inundación",
+    "marejada",
+    "hurricane",
+    "tropical storm",
+    "flood",
+    "surge",
+    "evacuation",
+  ],
+  tiles: [
+    {
+      id: "radar",
+      title: "Radar",
+      group: "weather",
+      refreshSeconds: 3600,
+      enabled: true,
+      sources: [{ kind: "image", url: "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/mex/13/GOES16-MEX-13-1000x1000.gif" }],
+    },
+    {
+      id: "cams",
+      title: "Cams",
+      group: "local",
+      refreshSeconds: 10,
+      enabled: true,
+      sources: [
+        { kind: "image", url: "https://webcamsdemexico.net/nuevovallarta1/live.jpg" },
+        { kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" },
+        { kind: "image", url: "https://webcamsdemexico.net/puertovallarta4/live.jpg" },
+      ],
+    },
+    {
+      id: "tropical",
+      title: "Tropical Activity",
+      group: "weather",
+      refreshSeconds: 600,
+      enabled: true,
+      sources: [
+        { kind: "image", url: "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png" },
+        { kind: "image", url: "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png" },
+      ],
+    },
+    {
+      id: "propagation",
+      title: "HF Propagation",
+      group: "radio",
+      refreshSeconds: 900,
+      enabled: true,
+      sources: [
+        { kind: "image", url: `https://img.propagation.dr2w.de/n-america/10M/dr2w_10M_${utcHour}.png` },
+        { kind: "image", url: `https://img.propagation.dr2w.de/n-america/20M/dr2w_20M_${utcHour}.png` },
+        { kind: "image", url: `https://img.propagation.dr2w.de/n-america/40M/dr2w_40M_${utcHour}.png` },
+      ],
+    },
+  ],
+  feeds: [
+    {
+      id: "nhc-epac-en",
+      name: "NHC Eastern Pacific",
+      category: "weather",
+      kind: "rss",
+      url: "https://www.nhc.noaa.gov/index-ep.xml",
+      priority: 10,
+      enabled: true,
+      tags: ["official", "hurricane", "pacific"],
+    },
+    {
+      id: "nhc-epac-es",
+      name: "NHC Eastern Pacific Spanish",
+      category: "weather",
+      kind: "rss",
+      url: "https://www.nhc.noaa.gov/index-ep-sp.xml",
+      priority: 10,
+      enabled: true,
+      tags: ["official", "huracan", "pacifico"],
+    },
+  ],
+};
