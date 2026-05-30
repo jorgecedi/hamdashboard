@@ -1,0 +1,66 @@
+import { describe, expect, it } from "vitest";
+import type { WorkerFeedSource } from "../src/feedTypes";
+import { normalizeEntry } from "../src/normalize";
+
+const officialSource: WorkerFeedSource = {
+  id: "official",
+  name: "Official",
+  category: "weather",
+  kind: "rss",
+  url: "https://example.com/official",
+  priority: 9,
+  enabled: true,
+  tags: ["official"],
+};
+
+const localNewsSource: WorkerFeedSource = {
+  id: "local-news",
+  name: "Local News",
+  category: "local",
+  kind: "rss",
+  url: "https://example.com/local",
+  priority: 4,
+  enabled: true,
+  tags: ["local", "news"],
+};
+
+describe("normalizeEntry urgency", () => {
+  it("does not raise urgency for location-only matches from non-official feeds", () => {
+    const item = normalizeEntry(
+      {
+        title: "Puerto Vallarta and Jalisco tourism update",
+        url: "https://example.com/local/location",
+      },
+      localNewsSource,
+      "2026-05-29T12:00:00Z",
+    );
+
+    expect(item.urgency).toBe("normal");
+  });
+
+  it("raises urgency for location-only matches from official feeds", () => {
+    const item = normalizeEntry(
+      {
+        title: "Puerto Vallarta and Jalisco weather bulletin",
+        url: "https://example.com/official/location",
+      },
+      officialSource,
+      "2026-05-29T12:00:00Z",
+    );
+
+    expect(item.urgency).toBe("urgent");
+  });
+
+  it("still raises urgency for hazard matches from non-official feeds", () => {
+    const item = normalizeEntry(
+      {
+        title: "Flood and evacuation reported downtown",
+        url: "https://example.com/local/hazard",
+      },
+      localNewsSource,
+      "2026-05-29T12:00:00Z",
+    );
+
+    expect(item.urgency).toBe("urgent");
+  });
+});
