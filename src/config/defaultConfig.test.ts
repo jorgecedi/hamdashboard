@@ -31,6 +31,26 @@ describe("defaultConfig", () => {
     ]);
   });
 
+  it("includes Windy rain and wind forecast iframe sources", () => {
+    const windy = defaultConfig.tiles.find((tile) => tile.id === "wind-rain-forecast");
+
+    expect(windy).toMatchObject({
+      title: "Wind + Rain",
+      group: "weather",
+      enabled: true,
+    });
+    expect(windy?.sources).toEqual([
+      {
+        kind: "iframe",
+        url: "https://embed.windy.com/embed2.html?lat=20.65&lon=-105.22&zoom=6&level=surface&overlay=rain&product=ecmwf",
+      },
+      {
+        kind: "iframe",
+        url: "https://embed.windy.com/embed2.html?lat=20.65&lon=-105.22&zoom=6&level=surface&overlay=wind&product=ecmwf",
+      },
+    ]);
+  });
+
   it("includes Puerto Vallarta and Mexico official feed sources", () => {
     expect(defaultConfig.feeds).toEqual(
       expect.arrayContaining([

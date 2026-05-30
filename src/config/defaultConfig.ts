@@ -83,6 +83,23 @@ export const defaultConfig: DashboardConfig = {
         { kind: "iframe", url: "https://www.youtube.com/embed/roYcxYa6izQ" },
       ],
     },
+    {
+      id: "wind-rain-forecast",
+      title: "Wind + Rain",
+      group: "weather",
+      refreshSeconds: 1800,
+      enabled: true,
+      sources: [
+        {
+          kind: "iframe",
+          url: "https://embed.windy.com/embed2.html?lat=20.65&lon=-105.22&zoom=6&level=surface&overlay=rain&product=ecmwf",
+        },
+        {
+          kind: "iframe",
+          url: "https://embed.windy.com/embed2.html?lat=20.65&lon=-105.22&zoom=6&level=surface&overlay=wind&product=ecmwf",
+        },
+      ],
+    },
   ],
   feeds: [
     {
