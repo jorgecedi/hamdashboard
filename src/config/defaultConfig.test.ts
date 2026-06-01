@@ -71,4 +71,43 @@ describe("defaultConfig", () => {
       ]),
     );
   });
+
+  it("includes grouped emergency links for live situation, official resources, and preparedness", () => {
+    expect(defaultConfig.emergencyLinks.map((group) => group.id)).toEqual([
+      "live-situation",
+      "weather-storms",
+      "local-official",
+      "preparedness-library",
+    ]);
+
+    const liveSituation = defaultConfig.emergencyLinks.find((group) => group.id === "live-situation");
+    expect(liveSituation?.links).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "iris-seismic-monitor",
+          label: "IRIS Seismic Monitor",
+          url: "https://www.iris.edu/app/seismic-monitor/map?lat=21.1159&lng=-106.4146&zoom=6",
+          kind: "map",
+        }),
+        expect.objectContaining({
+          id: "nasa-firms",
+          label: "NASA FIRMS Fire Map",
+          url: "https://firms.modaps.eosdis.nasa.gov/map/#d:24hrs;@-104.0,21.4,7.1z",
+          kind: "map",
+        }),
+      ]),
+    );
+
+    const preparedness = defaultConfig.emergencyLinks.find((group) => group.id === "preparedness-library");
+    expect(preparedness?.links).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "survival-data",
+          label: "jorgecedi/Survival-Data",
+          url: "https://github.com/jorgecedi/Survival-Data",
+          kind: "community",
+        }),
+      ]),
+    );
+  });
 });

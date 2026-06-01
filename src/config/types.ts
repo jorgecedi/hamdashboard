@@ -1,5 +1,6 @@
 export type TileKind = "image" | "video" | "iframe";
 export type FeedCategory = "weather" | "emergency" | "local" | "radio" | "news" | "social";
+export type EmergencyLinkKind = "official" | "map" | "preparedness" | "community";
 
 export type TileSource = {
   kind: TileKind;
@@ -27,6 +28,20 @@ export type FeedSource = {
   tags: string[];
 };
 
+export type EmergencyLink = {
+  id: string;
+  label: string;
+  url: string;
+  description: string;
+  kind: EmergencyLinkKind;
+};
+
+export type EmergencyLinkGroup = {
+  id: string;
+  title: string;
+  links: EmergencyLink[];
+};
+
 export type DashboardConfig = {
   site: {
     title: string;
@@ -37,6 +52,7 @@ export type DashboardConfig = {
   };
   workerEndpoint?: string;
   socialMonitoringEnabled: boolean;
+  emergencyLinks: EmergencyLinkGroup[];
   urgencyKeywords: string[];
   tiles: DashboardTile[];
   feeds: FeedSource[];
