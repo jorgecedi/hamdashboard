@@ -14,7 +14,7 @@ export function Dashboard({ config, feedResponse }: DashboardProps) {
 
   return (
     <div className="dashboard-shell">
-      <TopBar config={config} />
+      <TopBar config={config} emergencyLinksOpen={false} onToggleEmergencyLinks={() => undefined} />
       <section className="dashboard-grid" aria-label="Dashboard tiles">
         {tiles.map((tile) => (
           <Tile key={tile.id} tile={tile} />

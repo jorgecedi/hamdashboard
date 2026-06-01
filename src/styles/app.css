@@ -104,8 +104,22 @@ body {
   border: 1px solid #2b3948;
 }
 
-.top-bar span:last-child {
-  text-align: right;
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.emergency-links-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #39485a;
+  background: #17212c;
+  color: #f5f7fb;
 }
 
 .dashboard-grid {
@@ -212,8 +226,8 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .top-bar span:last-child {
-    text-align: left;
+  .top-bar-actions {
+    justify-content: space-between;
   }
 
   .dashboard-grid {
