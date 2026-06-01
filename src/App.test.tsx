@@ -8,6 +8,7 @@ describe("App", () => {
     render(<App />);
 
     expect(screen.getByText(/XE1CPM - DL70ir/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /open emergency links/i })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: /dashboard tiles/i })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: /emergency and news feed/i })).toBeInTheDocument();
   });
