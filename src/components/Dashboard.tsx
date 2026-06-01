@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { DashboardConfig } from "../config/types";
 import type { FeedResponse } from "../feeds/types";
 import { EmergencyLinksSidebar } from "./EmergencyLinksSidebar";
@@ -13,6 +13,7 @@ type DashboardProps = {
 
 export function Dashboard({ config, feedResponse }: DashboardProps) {
   const [emergencyLinksOpen, setEmergencyLinksOpen] = useState(false);
+  const emergencyLinksToggleRef = useRef<HTMLButtonElement>(null);
   const tiles = config.tiles.filter((tile) => tile.enabled);
 
   return (
@@ -20,10 +21,15 @@ export function Dashboard({ config, feedResponse }: DashboardProps) {
       <TopBar
         config={config}
         emergencyLinksOpen={emergencyLinksOpen}
+        emergencyLinksToggleRef={emergencyLinksToggleRef}
         onToggleEmergencyLinks={() => setEmergencyLinksOpen((open) => !open)}
       />
       {emergencyLinksOpen ? (
-        <EmergencyLinksSidebar groups={config.emergencyLinks} onClose={() => setEmergencyLinksOpen(false)} />
+        <EmergencyLinksSidebar
+          groups={config.emergencyLinks}
+          ignoredOutsideClickRefs={[emergencyLinksToggleRef]}
+          onClose={() => setEmergencyLinksOpen(false)}
+        />
       ) : null}
       <section className="dashboard-grid" aria-label="Dashboard tiles">
         {tiles.map((tile) => (

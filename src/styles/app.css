@@ -123,6 +123,11 @@ body {
   color: #f5f7fb;
 }
 
+.emergency-links-toggle[aria-expanded="true"] {
+  position: relative;
+  z-index: 45;
+}
+
 .emergency-links-layer {
   position: fixed;
   inset: 0;

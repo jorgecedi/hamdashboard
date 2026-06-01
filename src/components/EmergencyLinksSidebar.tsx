@@ -1,9 +1,11 @@
 import { X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import type { RefObject } from "react";
 import type { EmergencyLinkGroup, EmergencyLinkKind } from "../config/types";
 
 type EmergencyLinksSidebarProps = {
   groups: EmergencyLinkGroup[];
+  ignoredOutsideClickRefs?: Array<RefObject<HTMLElement | null>>;
   onClose: () => void;
 };
 
@@ -14,7 +16,9 @@ const kindLabels: Record<EmergencyLinkKind, string> = {
   community: "Community",
 };
 
-export function EmergencyLinksSidebar({ groups, onClose }: EmergencyLinksSidebarProps) {
+export function EmergencyLinksSidebar({ groups, ignoredOutsideClickRefs = [], onClose }: EmergencyLinksSidebarProps) {
+  const sidebarRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -29,10 +33,36 @@ export function EmergencyLinksSidebar({ groups, onClose }: EmergencyLinksSidebar
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const handleMouseDown = (event: MouseEvent) => {
+      const target = event.target;
+
+      if (!(target instanceof Node)) {
+        return;
+      }
+
+      if (sidebarRef.current?.contains(target)) {
+        return;
+      }
+
+      if (ignoredOutsideClickRefs.some((ref) => ref.current?.contains(target))) {
+        return;
+      }
+
+      onClose();
+    };
+
+    document.addEventListener("mousedown", handleMouseDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+    };
+  }, [ignoredOutsideClickRefs, onClose]);
+
   return (
     <div className="emergency-links-layer" role="presentation">
-      <div className="emergency-links-backdrop" data-testid="emergency-links-backdrop" onMouseDown={onClose} />
-      <aside id="emergency-links-sidebar" className="emergency-links-sidebar" aria-label="Emergency resources">
+      <div className="emergency-links-backdrop" data-testid="emergency-links-backdrop" />
+      <aside ref={sidebarRef} id="emergency-links-sidebar" className="emergency-links-sidebar" aria-label="Emergency resources">
         <header className="emergency-links-header">
           <p>Emergency</p>
           <h2>Resources</h2>

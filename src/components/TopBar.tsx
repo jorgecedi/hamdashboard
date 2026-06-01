@@ -1,13 +1,15 @@
 import { Menu } from "lucide-react";
+import type { Ref } from "react";
 import type { DashboardConfig } from "../config/types";
 
 type TopBarProps = {
   config: DashboardConfig;
   emergencyLinksOpen: boolean;
+  emergencyLinksToggleRef?: Ref<HTMLButtonElement>;
   onToggleEmergencyLinks: () => void;
 };
 
-export function TopBar({ config, emergencyLinksOpen, onToggleEmergencyLinks }: TopBarProps) {
+export function TopBar({ config, emergencyLinksOpen, emergencyLinksToggleRef, onToggleEmergencyLinks }: TopBarProps) {
   const now = new Date();
   const localTime = new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
@@ -23,6 +25,7 @@ export function TopBar({ config, emergencyLinksOpen, onToggleEmergencyLinks }: T
       <div className="top-bar-actions">
         <span>{utcTime}</span>
         <button
+          ref={emergencyLinksToggleRef}
           type="button"
           className="emergency-links-toggle"
           aria-label={emergencyLinksOpen ? "Close emergency links" : "Open emergency links"}
