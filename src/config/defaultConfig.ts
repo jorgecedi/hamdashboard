@@ -81,6 +81,8 @@ export const defaultConfig: DashboardConfig = {
       sources: [
         { kind: "iframe", url: "https://www.youtube.com/embed/5boZ1Vw95OU" },
         { kind: "iframe", url: "https://www.youtube.com/embed/roYcxYa6izQ" },
+        { kind: "iframe", url: "https://www.youtube.com/embed/G5Rzz2JrmQ4" },
+        { kind: "iframe", url: "https://www.youtube.com/embed/yIi9Rsl7KQ8" },
       ],
     },
     {
