@@ -111,7 +111,8 @@ body {
   gap: 8px;
 }
 
-.emergency-links-toggle {
+.emergency-links-toggle,
+.emergency-links-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -120,6 +121,128 @@ body {
   border: 1px solid #39485a;
   background: #17212c;
   color: #f5f7fb;
+}
+
+.emergency-links-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.emergency-links-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.52);
+}
+
+.emergency-links-sidebar {
+  position: relative;
+  width: min(420px, calc(100vw - 32px));
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 14px;
+  padding: 16px;
+  overflow: auto;
+  background: #111820;
+  border-right: 1px solid #39485a;
+  box-shadow: 18px 0 40px rgba(0, 0, 0, 0.36);
+}
+
+.emergency-links-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.emergency-links-header p,
+.emergency-links-header h2 {
+  margin: 0;
+}
+
+.emergency-links-header p {
+  color: #8fa0b2;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.emergency-links-header h2 {
+  font-size: 1.2rem;
+}
+
+.emergency-link-groups {
+  display: grid;
+  gap: 18px;
+}
+
+.emergency-link-group h3 {
+  margin: 0;
+  color: #d8e1eb;
+  font-size: 0.88rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.emergency-link-group,
+.emergency-link-list {
+  display: grid;
+  gap: 8px;
+}
+
+.emergency-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 10px;
+  padding: 10px;
+  color: #f5f7fb;
+  text-decoration: none;
+  background: #0b1017;
+  border: 1px solid #2b3948;
+  border-radius: 8px;
+}
+
+.emergency-link:hover,
+.emergency-link:focus-visible {
+  background: #17212c;
+  border-color: #53677d;
+}
+
+.emergency-link-label {
+  min-width: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.emergency-link-kind {
+  align-self: start;
+  padding: 2px 8px;
+  border: 1px solid #53677d;
+  border-radius: 999px;
+  color: #d8e1eb;
+  background: #17212c;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.emergency-link-kind-community {
+  border-color: #a46d12;
+  color: #fbd38d;
+  background: #2c1f0b;
+}
+
+.emergency-link-description {
+  grid-column: 1 / -1;
+  color: #b8c3cf;
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.emergency-links-empty {
+  margin: 0;
+  color: #b8c3cf;
 }
 
 .dashboard-grid {
