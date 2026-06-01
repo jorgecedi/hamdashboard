@@ -1,9 +1,24 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { App } from "./App";
 
 describe("App", () => {
+  afterEach(() => cleanup());
+
+  it("renders when structuredClone is unavailable", async () => {
+    const originalStructuredClone = globalThis.structuredClone;
+    Reflect.deleteProperty(globalThis, "structuredClone");
+
+    try {
+      render(<App />);
+
+      expect(screen.getByText(/XE1CPM - DL70ir/i)).toBeInTheDocument();
+    } finally {
+      globalThis.structuredClone = originalStructuredClone;
+    }
+  });
+
   it("renders the dashboard shell", async () => {
     render(<App />);
 

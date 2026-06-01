@@ -3,6 +3,12 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    target: "es2017",
+  },
+  esbuild: {
+    target: "es2017",
+  },
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],

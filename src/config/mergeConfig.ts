@@ -1,10 +1,18 @@
 import type { DashboardConfig, DashboardOverrides } from "./types";
 
+function cloneConfig(config: DashboardConfig): DashboardConfig {
+  if (typeof structuredClone === "function") {
+    return structuredClone(config);
+  }
+
+  return JSON.parse(JSON.stringify(config)) as DashboardConfig;
+}
+
 export function mergeConfig(base: DashboardConfig, overrides: DashboardOverrides | null | undefined): DashboardConfig {
-  if (!overrides) return structuredClone(base);
+  if (!overrides) return cloneConfig(base);
 
   const merged: DashboardConfig = {
-    ...structuredClone(base),
+    ...cloneConfig(base),
     ...(overrides.workerEndpoint !== undefined ? { workerEndpoint: overrides.workerEndpoint } : {}),
     ...(overrides.socialMonitoringEnabled !== undefined ? { socialMonitoringEnabled: overrides.socialMonitoringEnabled } : {}),
     ...(overrides.urgencyKeywords ? { urgencyKeywords: [...overrides.urgencyKeywords] } : {}),
