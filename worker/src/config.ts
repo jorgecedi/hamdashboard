@@ -2,16 +2,6 @@ import type { WorkerFeedSource } from "./feedTypes";
 
 export const workerFeedSources: WorkerFeedSource[] = [
   {
-    id: "nhc-epac-en",
-    name: "NHC Eastern Pacific",
-    category: "weather",
-    kind: "rss",
-    url: "https://www.nhc.noaa.gov/index-ep.xml",
-    priority: 10,
-    enabled: true,
-    tags: ["official", "hurricane", "pacific"],
-  },
-  {
     id: "nhc-epac-es",
     name: "NHC Eastern Pacific Spanish",
     category: "weather",
@@ -20,16 +10,6 @@ export const workerFeedSources: WorkerFeedSource[] = [
     priority: 10,
     enabled: true,
     tags: ["official", "huracan", "pacifico"],
-  },
-  {
-    id: "smn-conagua-alerts",
-    name: "SMN CONAGUA Alerts",
-    category: "weather",
-    kind: "rss",
-    url: "https://correo1.conagua.gob.mx/feedsmn/feedalert.aspx",
-    priority: 9,
-    enabled: true,
-    tags: ["official", "mexico", "weather"],
   },
   {
     id: "vallarta-daily-pv",

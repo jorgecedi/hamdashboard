@@ -14,7 +14,7 @@ describe("worker", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toBe("application/json; charset=utf-8");
     expect(response.headers.get("access-control-allow-origin")).toBe("*");
-    expect(await response.json()).toMatchObject({ ok: true, cacheSeconds: 90, sourceCount: 4 });
+    expect(await response.json()).toMatchObject({ ok: true, cacheSeconds: 90, sourceCount: 2 });
   });
 
   it("returns 404 for unknown routes", async () => {
@@ -33,7 +33,7 @@ describe("worker", () => {
       )),
     );
 
-    const response = await worker.fetch(new Request("https://feeds.example.test/api/feeds/nhc-epac-en"), {
+    const response = await worker.fetch(new Request("https://feeds.example.test/api/feeds/nhc-epac-es"), {
       CACHE_SECONDS: "45",
     });
     const payload = await response.json();
@@ -41,16 +41,16 @@ describe("worker", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("public, max-age=45");
     expect(payload.statuses).toEqual([
-      expect.objectContaining({ sourceId: "nhc-epac-en", ok: true, itemCount: 1 }),
+      expect.objectContaining({ sourceId: "nhc-epac-es", ok: true, itemCount: 1 }),
     ]);
     expect(payload.items).toEqual([
       expect.objectContaining({
-        id: "nhc-epac-en:https://example.com/hurricane",
-        sourceId: "nhc-epac-en",
-        sourceName: "NHC Eastern Pacific",
+        id: "nhc-epac-es:https://example.com/hurricane",
+        sourceId: "nhc-epac-es",
+        sourceName: "NHC Eastern Pacific Spanish",
         category: "weather",
         urgency: "urgent",
-        tags: ["official", "hurricane", "pacific"],
+        tags: ["official", "huracan", "pacifico"],
       }),
     ]);
   });
@@ -58,13 +58,13 @@ describe("worker", () => {
   it("returns source failure metadata without failing the whole response", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response("Nope", { status: 503 })));
 
-    const response = await worker.fetch(new Request("https://feeds.example.test/api/feeds/nhc-epac-en"), {});
+    const response = await worker.fetch(new Request("https://feeds.example.test/api/feeds/nhc-epac-es"), {});
     const payload = await response.json();
 
     expect(response.status).toBe(200);
     expect(payload.items).toEqual([]);
     expect(payload.statuses).toEqual([
-      expect.objectContaining({ sourceId: "nhc-epac-en", ok: false, itemCount: 0, error: "HTTP 503" }),
+      expect.objectContaining({ sourceId: "nhc-epac-es", ok: false, itemCount: 0, error: "HTTP 503" }),
     ]);
   });
 });
