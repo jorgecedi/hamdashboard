@@ -28,7 +28,7 @@ describe("SettingsPanel", () => {
     fireEvent.click(screen.getByRole("button", { name: /save settings/i }));
 
     expect(onSave).toHaveBeenCalledWith({
-      workerEndpoint: "/api",
+      workerEndpoint: defaultConfig.workerEndpoint,
       tiles: expect.arrayContaining([
         { id: "radar", refreshSeconds: 1800 },
         { id: "live-video", refreshSeconds: 3600 },

@@ -10,7 +10,7 @@ export const defaultConfig: DashboardConfig = {
     timezone: "America/Bahia_Banderas",
     language: "en",
   },
-  workerEndpoint: "/api",
+  workerEndpoint: "https://feed.jorgecedi.com/api",
   socialMonitoringEnabled: false,
   emergencyLinks: [
     {
@@ -223,7 +223,7 @@ export const defaultConfig: DashboardConfig = {
       id: "propagation",
       title: "HF Propagation",
       group: "radio",
-      refreshSeconds: 900,
+      refreshSeconds: 600,
       enabled: true,
       sources: [
         { kind: "image", url: `https://img.propagation.dr2w.de/n-america/10M/dr2w_10M_${utcHour}.png` },
@@ -236,7 +236,7 @@ export const defaultConfig: DashboardConfig = {
       id: "live-video",
       title: "Live Video",
       group: "news",
-      refreshSeconds: 600,
+      refreshSeconds: 86400,
       enabled: true,
       sources: [
         { kind: "iframe", url: "https://www.youtube.com/embed/5boZ1Vw95OU" },
@@ -249,7 +249,7 @@ export const defaultConfig: DashboardConfig = {
       id: "wind-rain-forecast",
       title: "Wind + Rain",
       group: "weather",
-      refreshSeconds: 1800,
+      refreshSeconds: 86400,
       enabled: true,
       sources: [
         {

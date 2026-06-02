@@ -2,6 +2,21 @@ import { describe, expect, it } from "vitest";
 import { defaultConfig } from "./defaultConfig";
 
 describe("defaultConfig", () => {
+  it("uses the configured default feed endpoint", () => {
+    expect(defaultConfig.workerEndpoint).toBe("https://feed.jorgecedi.com/api");
+  });
+
+  it("uses the configured default tile rotation seconds", () => {
+    expect(Object.fromEntries(defaultConfig.tiles.map((tile) => [tile.id, tile.refreshSeconds]))).toMatchObject({
+      radar: 3600,
+      cams: 10,
+      tropical: 600,
+      propagation: 600,
+      "live-video": 86400,
+      "wind-rain-forecast": 86400,
+    });
+  });
+
   it("uses only the Puerto Vallarta 5 webcam for the cams tile", () => {
     const cams = defaultConfig.tiles.find((tile) => tile.id === "cams");
 
