@@ -12,6 +12,16 @@ export const workerFeedSources: WorkerFeedSource[] = [
     tags: ["official", "huracan", "pacifico"],
   },
   {
+    id: "semar-tsunami-alerts",
+    name: "SEMAR Tsunami Alerts",
+    category: "emergency",
+    kind: "rss",
+    url: "https://diredimoat.semar.gob.mx/cat/rss/rss_feed.xml",
+    priority: 10,
+    enabled: true,
+    tags: ["official", "mexico", "tsunami"],
+  },
+  {
     id: "vallarta-daily-pv",
     name: "Vallarta Daily Puerto Vallarta",
     category: "local",

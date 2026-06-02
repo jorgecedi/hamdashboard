@@ -70,7 +70,7 @@ describe("defaultConfig", () => {
     */
   });
 
-  it("keeps only the Spanish NHC alert feed and local Puerto Vallarta feed", () => {
+  it("keeps the configured Spanish NHC, SEMAR tsunami, and local Puerto Vallarta feeds", () => {
     expect(defaultConfig.feeds.map((feed) => feed.id)).not.toEqual(expect.arrayContaining(["nhc-epac-en", "smn-conagua-alerts"]));
     expect(defaultConfig.feeds).toEqual(
       expect.arrayContaining([
@@ -78,6 +78,11 @@ describe("defaultConfig", () => {
           id: "nhc-epac-es",
           name: "NHC Eastern Pacific Spanish",
           url: "https://www.nhc.noaa.gov/index-ep-sp.xml",
+        }),
+        expect.objectContaining({
+          id: "semar-tsunami-alerts",
+          name: "SEMAR Tsunami Alerts",
+          url: "https://diredimoat.semar.gob.mx/cat/rss/rss_feed.xml",
         }),
         expect.objectContaining({
           id: "vallarta-daily-pv",
