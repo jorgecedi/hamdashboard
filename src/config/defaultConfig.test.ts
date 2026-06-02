@@ -111,6 +111,12 @@ describe("defaultConfig", () => {
           url: "https://firms.modaps.eosdis.nasa.gov/map/#d:24hrs;@-104.0,21.4,7.1z",
           kind: "map",
         }),
+        expect.objectContaining({
+          id: "bahia-banderas-consulta-riesgo",
+          label: "Consulta tu Riesgo Bahia de Banderas",
+          url: "https://implan.bahiadebanderas.gob.mx/amr2026-consultamapa",
+          kind: "map",
+        }),
       ]),
     );
 

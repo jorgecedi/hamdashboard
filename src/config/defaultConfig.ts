@@ -59,6 +59,13 @@ export const defaultConfig: DashboardConfig = {
           description: "National risk atlas for hazards in Mexico.",
           kind: "official",
         },
+        {
+          id: "bahia-banderas-consulta-riesgo",
+          label: "Consulta tu Riesgo Bahia de Banderas",
+          url: "https://implan.bahiadebanderas.gob.mx/amr2026-consultamapa",
+          description: "Bahia de Banderas municipal risk atlas, weather, shelters, and prevention map.",
+          kind: "map",
+        },
       ],
     },
     {
