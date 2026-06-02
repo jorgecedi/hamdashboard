@@ -265,16 +265,6 @@ export const defaultConfig: DashboardConfig = {
   ],
   feeds: [
     {
-      id: "nhc-epac-en",
-      name: "NHC Eastern Pacific",
-      category: "weather",
-      kind: "rss",
-      url: "https://www.nhc.noaa.gov/index-ep.xml",
-      priority: 10,
-      enabled: true,
-      tags: ["official", "hurricane", "pacific"],
-    },
-    {
       id: "nhc-epac-es",
       name: "NHC Eastern Pacific Spanish",
       category: "weather",
@@ -283,16 +273,6 @@ export const defaultConfig: DashboardConfig = {
       priority: 10,
       enabled: true,
       tags: ["official", "huracan", "pacifico"],
-    },
-    {
-      id: "smn-conagua-alerts",
-      name: "SMN CONAGUA Alerts",
-      category: "weather",
-      kind: "rss",
-      url: "https://correo1.conagua.gob.mx/feedsmn/feedalert.aspx",
-      priority: 9,
-      enabled: true,
-      tags: ["official", "mexico", "weather"],
     },
     {
       id: "vallarta-daily-pv",

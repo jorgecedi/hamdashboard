@@ -70,13 +70,14 @@ describe("defaultConfig", () => {
     */
   });
 
-  it("includes Puerto Vallarta and Mexico official feed sources", () => {
+  it("keeps only the Spanish NHC alert feed and local Puerto Vallarta feed", () => {
+    expect(defaultConfig.feeds.map((feed) => feed.id)).not.toEqual(expect.arrayContaining(["nhc-epac-en", "smn-conagua-alerts"]));
     expect(defaultConfig.feeds).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: "smn-conagua-alerts",
-          name: "SMN CONAGUA Alerts",
-          url: "https://correo1.conagua.gob.mx/feedsmn/feedalert.aspx",
+          id: "nhc-epac-es",
+          name: "NHC Eastern Pacific Spanish",
+          url: "https://www.nhc.noaa.gov/index-ep-sp.xml",
         }),
         expect.objectContaining({
           id: "vallarta-daily-pv",
