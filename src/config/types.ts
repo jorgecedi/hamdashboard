@@ -42,6 +42,26 @@ export type EmergencyLinkGroup = {
   links: EmergencyLink[];
 };
 
+export type EmergencyChecklistItem = {
+  id: string;
+  label: string;
+};
+
+export type CriticalContact = {
+  id: string;
+  label: string;
+  value: string;
+  note?: string;
+  official: boolean;
+};
+
+export type RadioReference = {
+  id: string;
+  label: string;
+  frequency: string;
+  note?: string;
+};
+
 export type DashboardConfig = {
   site: {
     title: string;
@@ -53,6 +73,9 @@ export type DashboardConfig = {
   workerEndpoint?: string;
   socialMonitoringEnabled: boolean;
   emergencyLinks: EmergencyLinkGroup[];
+  emergencyChecklist: EmergencyChecklistItem[];
+  criticalContacts: CriticalContact[];
+  radioReferences: RadioReference[];
   urgencyKeywords: string[];
   tiles: DashboardTile[];
   feeds: FeedSource[];
