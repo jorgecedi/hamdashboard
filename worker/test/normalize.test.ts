@@ -25,6 +25,21 @@ const localNewsSource: WorkerFeedSource = {
 };
 
 describe("normalizeEntry urgency", () => {
+  it("removes the NOAA Spanish machine translation disclaimer from summaries", () => {
+    const item = normalizeEntry(
+      {
+        title: "Aviso de clima",
+        summary:
+          "Lluvia fuerte esperada. *** Este producto ha sido procesado automáticamente utilizando un programa de traducción y puede contener omisiones y errores. El Servicio Nacional de Meteorología no puede garantizar la precisión del texto convertido. De haber alguna duda, el texto en inglés es siempre la versión autorizada. *** Manténgase atento.",
+        url: "https://example.com/official/disclaimer",
+      },
+      officialSource,
+      "2026-05-29T12:00:00Z",
+    );
+
+    expect(item.summary).toBe("Lluvia fuerte esperada. Manténgase atento.");
+  });
+
   it("does not raise urgency for location-only matches from non-official feeds", () => {
     const item = normalizeEntry(
       {
