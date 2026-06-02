@@ -6,3 +6,4 @@ dist
 .superpowers
 coverage
 *.tsbuildinfo
+.worktrees
