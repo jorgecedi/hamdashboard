@@ -25,7 +25,8 @@ export function selectEmergencyBannerItem(items: FeedItem[], now = new Date()): 
     .filter((item) => item.category === "emergency" || item.urgency === "urgent")
     .filter((item) => {
       const publishedTime = itemTime(item);
-      return publishedTime > 0 && now.getTime() - publishedTime <= maxAgeMs;
+      const nowTime = now.getTime();
+      return publishedTime > 0 && publishedTime <= nowTime && nowTime - publishedTime <= maxAgeMs;
     })
     .sort((a, b) => sourcePriority(a) - sourcePriority(b) || itemTime(b) - itemTime(a))[0];
 }

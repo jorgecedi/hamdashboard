@@ -26,6 +26,12 @@ describe("selectEmergencyBannerItem", () => {
     expect(selectEmergencyBannerItem([stale], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
   });
 
+  it("hides future-dated official emergency items", () => {
+    const future = { ...baseItem, publishedAt: "2026-06-10T12:00:00Z" };
+
+    expect(selectEmergencyBannerItem([future], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
+  });
+
   it("hides non-official emergency items", () => {
     const unofficial = { ...baseItem, tags: ["local"] };
 
