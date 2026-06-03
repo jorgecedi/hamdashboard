@@ -42,6 +42,21 @@ describe("buildOfficialSourceStatuses", () => {
     expect(rows[0]).toMatchObject({ state: "unknown", fetchedAt: undefined, itemCount: undefined });
   });
 
+  it("marks official sources as error when the feed service is unavailable", () => {
+    const rows = buildOfficialSourceStatuses({
+      feeds: [officialEmergency],
+      statuses: [{ sourceId: "feed-service", ok: false, fetchedAt: "2026-06-02T11:30:00Z", itemCount: 0, error: "Network unavailable" }],
+      now,
+    });
+
+    expect(rows[0]).toMatchObject({
+      state: "error",
+      fetchedAt: "2026-06-02T11:30:00Z",
+      itemCount: 0,
+      message: "Feed service unavailable",
+    });
+  });
+
   it("marks a feed service error as error", () => {
     const rows = buildOfficialSourceStatuses({
       feeds: [officialEmergency],

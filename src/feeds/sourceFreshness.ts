@@ -32,6 +32,7 @@ const staleThresholdByCategory: Record<FeedSource["category"], number> = {
 
 export function buildOfficialSourceStatuses({ feeds, statuses, now = new Date() }: BuildOfficialSourceStatusesArgs): OfficialSourceStatusRow[] {
   const statusBySource = new Map(statuses.map((status) => [status.sourceId, status]));
+  const serviceError = statuses.find((status) => status.sourceId === "feed-service" && !status.ok);
 
   return feeds
     .filter((feed) => feed.enabled && feed.tags.includes("official"))
@@ -39,6 +40,18 @@ export function buildOfficialSourceStatuses({ feeds, statuses, now = new Date() 
       const status = statusBySource.get(feed.id);
 
       if (!status) {
+        if (serviceError) {
+          return {
+            sourceId: feed.id,
+            label: feed.name,
+            category: feed.category,
+            state: "error" as const,
+            fetchedAt: serviceError.fetchedAt,
+            itemCount: 0,
+            message: "Feed service unavailable",
+          };
+        }
+
         return {
           sourceId: feed.id,
           label: feed.name,

@@ -11,6 +11,23 @@ import { clearSettings, loadSettings, saveSettings } from "./storage/settingsSto
 
 const emptyFeeds: FeedResponse = { items: [], statuses: [] };
 
+function feedServiceErrorResponse(error: unknown): FeedResponse {
+  const message = error instanceof Error ? error.message : "Feed request failed";
+
+  return {
+    items: [],
+    statuses: [
+      {
+        sourceId: "feed-service",
+        ok: false,
+        fetchedAt: new Date().toISOString(),
+        itemCount: 0,
+        error: message,
+      },
+    ],
+  };
+}
+
 export function App() {
   const [overrides, setOverrides] = useState<DashboardOverrides | null>(() => loadSettings());
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -23,8 +40,8 @@ export function App() {
       .then((response) => {
         if (!cancelled) setFeedResponse(response);
       })
-      .catch(() => {
-        if (!cancelled) setFeedResponse(emptyFeeds);
+      .catch((error: unknown) => {
+        if (!cancelled) setFeedResponse(feedServiceErrorResponse(error));
       });
     return () => {
       cancelled = true;
