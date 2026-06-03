@@ -26,4 +26,16 @@ describe("FeedPanel", () => {
     render(<FeedPanel items={[]} statuses={[{ sourceId: "nhc", ok: false, fetchedAt: "2026-05-29T12:00:00Z", itemCount: 0, error: "HTTP 500" }]} />);
     expect(screen.getByText(/nhc: HTTP 500/i)).toBeInTheDocument();
   });
+
+  it("shows a clear freshness warning when a source may not be current", () => {
+    render(
+      <FeedPanel
+        items={[]}
+        statuses={[{ sourceId: "nhc-epac-es", ok: true, fetchedAt: "2026-05-29T12:00:00Z", itemCount: 0 }]}
+        staleSourceCount={1}
+      />,
+    );
+
+    expect(screen.getByText("1 source may not be current")).toBeInTheDocument();
+  });
 });

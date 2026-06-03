@@ -24,6 +24,7 @@ export function Dashboard({ config, feedResponse }: DashboardProps) {
     feeds: config.feeds,
     statuses: feedResponse.statuses,
   });
+  const staleSourceCount = officialSourceStatuses.filter((status) => status.state === "stale").length;
 
   return (
     <div className="dashboard-shell">
@@ -51,7 +52,7 @@ export function Dashboard({ config, feedResponse }: DashboardProps) {
       </section>
       <div className="dashboard-side-panel">
         <OfficialSourceStatusPanel rows={officialSourceStatuses} />
-        <FeedPanel items={feedResponse.items} statuses={feedResponse.statuses} />
+        <FeedPanel items={feedResponse.items} statuses={feedResponse.statuses} staleSourceCount={staleSourceCount} />
       </div>
     </div>
   );
