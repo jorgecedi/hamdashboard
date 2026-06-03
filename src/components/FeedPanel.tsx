@@ -18,11 +18,15 @@ export function FeedPanel({ items, statuses, staleSourceCount = 0 }: FeedPanelPr
         <h2>Emergency Feed</h2>
         <span>{items.length} items</span>
       </header>
-      {errors.map((status) => (
-        <p className="source-error" key={status.sourceId}>{status.sourceId}: {status.error}</p>
-      ))}
-      {staleSourceCount > 0 ? (
-        <p className="source-stale">{staleSourceCount} {staleSourceCount === 1 ? "source" : "sources"} may not be current</p>
+      {errors.length > 0 || staleSourceCount > 0 ? (
+        <div className="feed-notices">
+          {errors.map((status) => (
+            <p className="source-error" key={status.sourceId}>{status.sourceId}: {status.error}</p>
+          ))}
+          {staleSourceCount > 0 ? (
+            <p className="source-stale">{staleSourceCount} {staleSourceCount === 1 ? "source" : "sources"} may not be current</p>
+          ) : null}
+        </div>
       ) : null}
       <div className="feed-list">
         {sorted.map((item) => (

@@ -83,6 +83,11 @@ body {
   color: #fca5a5;
 }
 
+.feed-notices {
+  display: grid;
+  gap: 6px;
+}
+
 .source-stale {
   margin: 8px 0 0;
   color: #fbd38d;
