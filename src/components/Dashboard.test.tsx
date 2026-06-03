@@ -21,6 +21,9 @@ describe("Dashboard", () => {
       "href",
       "https://github.com/jorgecedi/Survival-Data",
     );
+    expect(screen.getByRole("heading", { name: /offline checklist/i })).toBeInTheDocument();
+    expect(screen.getByText("Emergencias Mexico")).toBeInTheDocument();
+    expect(screen.getByText("Marine VHF Ch 16")).toBeInTheDocument();
 
     fireEvent.click(within(sidebar).getByRole("button", { name: /close emergency links/i }));
 

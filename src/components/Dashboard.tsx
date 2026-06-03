@@ -36,6 +36,9 @@ export function Dashboard({ config, feedResponse }: DashboardProps) {
       {emergencyLinksOpen ? (
         <EmergencyLinksSidebar
           groups={config.emergencyLinks}
+          checklist={config.emergencyChecklist}
+          contacts={config.criticalContacts}
+          radioReferences={config.radioReferences}
           ignoredOutsideClickRefs={[emergencyLinksToggleRef]}
           onClose={() => setEmergencyLinksOpen(false)}
         />

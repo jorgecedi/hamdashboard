@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { EmergencyLinkGroup } from "../config/types";
+import type { CriticalContact, EmergencyChecklistItem, EmergencyLinkGroup, RadioReference } from "../config/types";
 import { EmergencyLinksSidebar } from "./EmergencyLinksSidebar";
 
 const groups: EmergencyLinkGroup[] = [
@@ -39,6 +39,26 @@ const groups: EmergencyLinkGroup[] = [
   },
 ];
 
+const checklist: EmergencyChecklistItem[] = [
+  { id: "water-food", label: "Water and non-perishable food" },
+  { id: "radio", label: "Battery or hand-crank radio" },
+];
+
+const contacts: CriticalContact[] = [
+  { id: "mexico-emergency", label: "Emergencias Mexico", value: "911", official: true },
+  { id: "cfe", label: "CFE fallas electricas", value: "071", official: true },
+];
+
+const radioReferences: RadioReference[] = [
+  { id: "marine-vhf-16", label: "Marine VHF Ch 16", frequency: "156.800 MHz" },
+  {
+    id: "ham-2m-simplex",
+    label: "Ham 2m simplex calling",
+    frequency: "146.520 MHz FM",
+    note: "Licensed operators only",
+  },
+];
+
 describe("EmergencyLinksSidebar", () => {
   afterEach(() => cleanup());
 
@@ -68,6 +88,26 @@ describe("EmergencyLinksSidebar", () => {
     render(<EmergencyLinksSidebar groups={groups} onClose={vi.fn()} />);
 
     expect(screen.getByText("Community")).toBeInTheDocument();
+  });
+
+  it("renders offline checklist, official contacts, and radio references", () => {
+    render(
+      <EmergencyLinksSidebar
+        groups={groups}
+        checklist={checklist}
+        contacts={contacts}
+        radioReferences={radioReferences}
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole("heading", { name: /offline checklist/i })).toBeInTheDocument();
+    expect(screen.getByText("Water and non-perishable food")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /critical contacts/i })).toBeInTheDocument();
+    expect(screen.getByText("911")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /radio reference/i })).toBeInTheDocument();
+    expect(screen.getByText("146.520 MHz FM")).toBeInTheDocument();
+    expect(screen.getByText("Licensed operators only")).toBeInTheDocument();
   });
 
   it("calls onClose when clicking the close button", () => {
