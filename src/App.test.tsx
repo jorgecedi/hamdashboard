@@ -1,12 +1,17 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
 describe("App", () => {
+  beforeEach(() => {
+    vi.useRealTimers();
+  });
+
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   it("renders when structuredClone is unavailable", async () => {
@@ -38,5 +43,21 @@ describe("App", () => {
 
     await waitFor(() => expect(screen.getByText(/feed-service: Network unavailable/i)).toBeInTheDocument());
     expect(screen.getAllByText("Feed service unavailable").length).toBeGreaterThan(0);
+  });
+
+  it("refreshes feeds every 180 seconds", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ items: [], statuses: [] }), { status: 200 }));
+
+    render(<App />);
+
+    await vi.advanceTimersByTimeAsync(0);
+    expect(fetch).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(179_000);
+    expect(fetch).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(1_000);
+    expect(fetch).toHaveBeenCalledTimes(2);
   });
 });

@@ -10,6 +10,7 @@ import type { FeedResponse } from "./feeds/types";
 import { clearSettings, loadSettings, saveSettings } from "./storage/settingsStorage";
 
 const emptyFeeds: FeedResponse = { items: [], statuses: [] };
+const FEED_REFRESH_MS = 180_000;
 
 function feedServiceErrorResponse(error: unknown): FeedResponse {
   const message = error instanceof Error ? error.message : "Feed request failed";
@@ -36,15 +37,23 @@ export function App() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchFeeds(config.workerEndpoint)
-      .then((response) => {
-        if (!cancelled) setFeedResponse(response);
-      })
-      .catch((error: unknown) => {
-        if (!cancelled) setFeedResponse(feedServiceErrorResponse(error));
-      });
+
+    function refreshFeeds() {
+      fetchFeeds(config.workerEndpoint)
+        .then((response) => {
+          if (!cancelled) setFeedResponse(response);
+        })
+        .catch((error: unknown) => {
+          if (!cancelled) setFeedResponse(feedServiceErrorResponse(error));
+        });
+    }
+
+    refreshFeeds();
+    const intervalId = window.setInterval(refreshFeeds, FEED_REFRESH_MS);
+
     return () => {
       cancelled = true;
+      window.clearInterval(intervalId);
     };
   }, [config.workerEndpoint]);
 
