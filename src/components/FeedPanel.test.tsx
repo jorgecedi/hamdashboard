@@ -55,4 +55,11 @@ describe("FeedPanel", () => {
     expect(notices).toContainElement(view.getByText(/nhc: HTTP 500/i));
     expect(notices).toContainElement(view.getByText("1 source may not be current"));
   });
+
+  it("keeps the feed list as a stable panel child when there are no notices", () => {
+    const { container } = render(<FeedPanel items={[baseItem]} statuses={[]} />);
+
+    expect(container.querySelector(".feed-notices")).not.toBeInTheDocument();
+    expect(container.querySelector(".feed-panel > .feed-list")).toBeInTheDocument();
+  });
 });
