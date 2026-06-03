@@ -17,10 +17,13 @@ describe("defaultConfig", () => {
     });
   });
 
-  it("uses only the Puerto Vallarta 5 webcam for the cams tile", () => {
+  it("uses the configured webcam snapshots for the cams tile", () => {
     const cams = defaultConfig.tiles.find((tile) => tile.id === "cams");
 
-    expect(cams?.sources).toEqual([{ kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" }]);
+    expect(cams?.sources).toEqual([
+      { kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" },
+      { kind: "image", url: "https://s90.ipcamlive.com/streams/5axrufacwmonk92ip/snapshot.jpg" },
+    ]);
   });
 
   it("includes the GOES19 source in the radar tile", () => {

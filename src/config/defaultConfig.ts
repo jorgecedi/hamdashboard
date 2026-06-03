@@ -260,7 +260,10 @@ export const defaultConfig: DashboardConfig = {
       group: "local",
       refreshSeconds: 10,
       enabled: true,
-      sources: [{ kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" }],
+      sources: [
+        { kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" },
+        { kind: "image", url: "https://s90.ipcamlive.com/streams/5axrufacwmonk92ip/snapshot.jpg" },
+      ],
     },
     {
       id: "tropical",

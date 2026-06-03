@@ -74,7 +74,7 @@ describe("worker", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => new Response(
-        `<rss><channel><item><title>Alerta de tsunami</title><link>https://example.com/tsunami</link><description>Boletin informativo</description><pubDate>2026-05-29T15:00:00Z</pubDate></item></channel></rss>`,
+        `<rss><channel><item><title>Alerta de tsunami</title><link>https://example.com/tsunami</link><description>Boletin informativo</description><pubDate>${daysAgo(1)}</pubDate></item></channel></rss>`,
         { status: 200 },
       )),
     );
