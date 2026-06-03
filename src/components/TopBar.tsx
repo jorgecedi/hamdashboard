@@ -1,4 +1,5 @@
 import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { Ref } from "react";
 import type { DashboardConfig } from "../config/types";
 
@@ -10,7 +11,18 @@ type TopBarProps = {
 };
 
 export function TopBar({ config, emergencyLinksOpen, emergencyLinksToggleRef, onToggleEmergencyLinks }: TopBarProps) {
-  const now = new Date();
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setNow(new Date());
+    }, 1_000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   const localTime = new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
     timeStyle: "medium",

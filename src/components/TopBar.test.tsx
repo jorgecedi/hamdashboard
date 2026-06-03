@@ -1,10 +1,17 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultConfig } from "../config/defaultConfig";
 import { TopBar } from "./TopBar";
 
 describe("TopBar", () => {
-  afterEach(() => cleanup());
+  beforeEach(() => {
+    vi.useRealTimers();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
 
   it("calls the emergency links toggle callback", () => {
     const onToggleEmergencyLinks = vi.fn();
@@ -19,5 +26,20 @@ describe("TopBar", () => {
     render(<TopBar config={defaultConfig} emergencyLinksOpen={true} onToggleEmergencyLinks={vi.fn()} />);
 
     expect(screen.getByRole("button", { name: /close emergency links/i })).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("updates the displayed time every second", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-03T12:00:00Z"));
+
+    render(<TopBar config={defaultConfig} emergencyLinksOpen={false} onToggleEmergencyLinks={vi.fn()} />);
+
+    expect(screen.getByText("2026-06-03 12:00:00 UTC")).toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1_000);
+    });
+
+    expect(screen.getByText("2026-06-03 12:00:01 UTC")).toBeInTheDocument();
   });
 });
