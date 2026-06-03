@@ -86,11 +86,22 @@ body {
 .dashboard-shell {
   height: 100vh;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 28vw);
   gap: 10px;
   padding: 10px;
   overflow: hidden;
+}
+
+.emergency-mode-banner {
+  grid-column: 1 / -1;
+}
+
+.dashboard-side-panel {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
 }
 
 .top-bar {
