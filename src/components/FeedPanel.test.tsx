@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { FeedPanel } from "./FeedPanel";
 import type { FeedItem } from "../feeds/types";
@@ -25,5 +25,41 @@ describe("FeedPanel", () => {
   it("shows source errors", () => {
     render(<FeedPanel items={[]} statuses={[{ sourceId: "nhc", ok: false, fetchedAt: "2026-05-29T12:00:00Z", itemCount: 0, error: "HTTP 500" }]} />);
     expect(screen.getByText(/nhc: HTTP 500/i)).toBeInTheDocument();
+  });
+
+  it("shows a clear freshness warning when a source may not be current", () => {
+    render(
+      <FeedPanel
+        items={[]}
+        statuses={[{ sourceId: "nhc-epac-es", ok: true, fetchedAt: "2026-05-29T12:00:00Z", itemCount: 0 }]}
+        staleSourceCount={1}
+      />,
+    );
+
+    expect(screen.getByText("1 source may not be current")).toBeInTheDocument();
+  });
+
+  it("keeps source errors and freshness warnings grouped as feed notices", () => {
+    const { container } = render(
+      <FeedPanel
+        items={[]}
+        statuses={[{ sourceId: "nhc", ok: false, fetchedAt: "2026-05-29T12:00:00Z", itemCount: 0, error: "HTTP 500" }]}
+        staleSourceCount={1}
+      />,
+    );
+
+    const notices = container.querySelector(".feed-notices");
+
+    const view = within(container);
+
+    expect(notices).toContainElement(view.getByText(/nhc: HTTP 500/i));
+    expect(notices).toContainElement(view.getByText("1 source may not be current"));
+  });
+
+  it("keeps the feed list as a stable panel child when there are no notices", () => {
+    const { container } = render(<FeedPanel items={[baseItem]} statuses={[]} />);
+
+    expect(container.querySelector(".feed-notices")).not.toBeInTheDocument();
+    expect(container.querySelector(".feed-panel > .feed-list")).toBeInTheDocument();
   });
 });

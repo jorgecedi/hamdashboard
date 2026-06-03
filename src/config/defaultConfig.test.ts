@@ -137,4 +137,30 @@ describe("defaultConfig", () => {
       ]),
     );
   });
+
+  it("includes emergency checklist, official contacts, and radio references", () => {
+    expect(defaultConfig.emergencyChecklist).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "water-food", label: "Water and non-perishable food" }),
+        expect.objectContaining({ id: "radio", label: "Battery or hand-crank radio" }),
+        expect.objectContaining({ id: "evacuation-bag", label: "Evacuation bag" }),
+      ]),
+    );
+
+    expect(defaultConfig.criticalContacts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "mexico-emergency", label: "Emergencias Mexico", value: "911", official: true }),
+        expect.objectContaining({ id: "cfe", label: "CFE fallas electricas", value: "071", official: true }),
+        expect.objectContaining({ id: "capufe", label: "CAPUFE carreteras", value: "074", official: true }),
+      ]),
+    );
+
+    expect(defaultConfig.radioReferences).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "marine-vhf-16", label: "Marine VHF Ch 16", frequency: "156.800 MHz" }),
+        expect.objectContaining({ id: "aviation-guard", label: "Aviation guard", frequency: "121.500 MHz" }),
+        expect.objectContaining({ id: "ham-2m-simplex", label: "Ham 2m simplex calling", frequency: "146.520 MHz FM" }),
+      ]),
+    );
+  });
 });

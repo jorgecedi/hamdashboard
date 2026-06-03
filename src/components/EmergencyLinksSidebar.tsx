@@ -1,10 +1,19 @@
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
-import type { EmergencyLinkGroup, EmergencyLinkKind } from "../config/types";
+import type {
+  CriticalContact,
+  EmergencyChecklistItem,
+  EmergencyLinkGroup,
+  EmergencyLinkKind,
+  RadioReference,
+} from "../config/types";
 
 type EmergencyLinksSidebarProps = {
   groups: EmergencyLinkGroup[];
+  checklist?: EmergencyChecklistItem[];
+  contacts?: CriticalContact[];
+  radioReferences?: RadioReference[];
   ignoredOutsideClickRefs?: Array<RefObject<HTMLElement | null>>;
   onClose: () => void;
 };
@@ -16,8 +25,16 @@ const kindLabels: Record<EmergencyLinkKind, string> = {
   community: "Community",
 };
 
-export function EmergencyLinksSidebar({ groups, ignoredOutsideClickRefs = [], onClose }: EmergencyLinksSidebarProps) {
+export function EmergencyLinksSidebar({
+  groups,
+  checklist = [],
+  contacts = [],
+  radioReferences = [],
+  ignoredOutsideClickRefs = [],
+  onClose,
+}: EmergencyLinksSidebarProps) {
   const sidebarRef = useRef<HTMLElement>(null);
+  const hasResources = groups.length > 0 || checklist.length > 0 || contacts.length > 0 || radioReferences.length > 0;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -71,10 +88,51 @@ export function EmergencyLinksSidebar({ groups, ignoredOutsideClickRefs = [], on
           </button>
         </header>
 
-        {groups.length === 0 ? (
+        {!hasResources ? (
           <p className="emergency-links-empty">No emergency resources configured.</p>
         ) : (
           <div className="emergency-link-groups">
+            {checklist.length > 0 ? (
+              <section className="emergency-link-group emergency-reference-section">
+                <h3>Offline Checklist</h3>
+                <ul className="emergency-checklist">
+                  {checklist.map((item) => (
+                    <li key={item.id}>{item.label}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {contacts.length > 0 ? (
+              <section className="emergency-link-group emergency-reference-section">
+                <h3>Critical Contacts</h3>
+                <div className="critical-contact-list">
+                  {contacts.map((contact) => (
+                    <article className="critical-contact" key={contact.id}>
+                      <span>{contact.label}</span>
+                      <strong>{contact.value}</strong>
+                      {contact.note ? <small>{contact.note}</small> : null}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {radioReferences.length > 0 ? (
+              <section className="emergency-link-group emergency-reference-section">
+                <h3>Radio Reference</h3>
+                <div className="radio-reference-list">
+                  {radioReferences.map((reference) => (
+                    <article className="radio-reference" key={reference.id}>
+                      <span>{reference.label}</span>
+                      <strong>{reference.frequency}</strong>
+                      {reference.note ? <small>{reference.note}</small> : null}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             {groups.map((group) => (
               <section className="emergency-link-group" key={group.id}>
                 <h3>{group.title}</h3>
