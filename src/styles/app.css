@@ -368,7 +368,15 @@ body {
   }
 
   .top-bar {
+    grid-column: 1;
     grid-template-columns: 1fr;
+  }
+
+  .emergency-mode-banner,
+  .dashboard-side-panel,
+  .dashboard-grid {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .top-bar-actions {
