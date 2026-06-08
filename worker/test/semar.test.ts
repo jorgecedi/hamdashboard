@@ -56,6 +56,8 @@ describe("filterSemarEntries impact", () => {
     "NO se esperan variaciones en el nivel del mar.",
     "NO se espera la generacion de variaciones del nivel del mar.",
     "NO se esperan generaciones de variaciones en el nivel del mar.",
+    "NO se pueden producir variaciones del nivel del mar.",
+    "NO se esperan variaciones de pocos centimetros.",
     "NO se espera la generacion de un tsunami para las costas de Mexico.",
     "Se descarta el arribo de un tsunami para las costas de Mexico.",
     "Se confirma la ausencia de variaciones importantes en el nivel del mar.",
@@ -103,5 +105,12 @@ describe("filterSemarEntries impact", () => {
     );
 
     expect(filterSemarEntries([item], fetchedAt)).toHaveLength(1);
+  });
+
+  it.each([
+    "NO SE ESPERA LA GENERACION DE UN TSUNAMI; sin embargo, se pueden producir variaciones del nivel del mar.",
+    "NO SE ESPERAN VARIACIONES IMPORTANTES; aunque se pueden producir variaciones de pocos centimetros.",
+  ])("keeps concrete positive impact following a contrast clause: %s", (summary) => {
+    expect(filterSemarEntries([entry(summary, recentPublishedAt)], fetchedAt)).toHaveLength(1);
   });
 });

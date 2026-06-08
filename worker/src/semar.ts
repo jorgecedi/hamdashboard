@@ -13,6 +13,8 @@ const possibleImpactPatterns = [
   /\b(?:evacuacion|precauciones?)\b/u,
 ];
 const explicitNoImpactPatterns = [
+  /\bno se pueden producir variaciones(?: de pocos centimetros)?(?: (?:en el|del) nivel del mar)?\b/u,
+  /\bno se esperan? variaciones de pocos centimetros(?: (?:en el|del) nivel del mar)?\b/u,
   /\bno se esperan? variaciones(?: importantes)? (?:en el|del) nivel del mar\b/u,
   /\bno se esperan? (?:la )?generacion(?:es)? de variaciones (?:en el|del) nivel del mar\b/u,
   /\bno se espera la generacion de un tsunami\b/u,
@@ -20,8 +22,8 @@ const explicitNoImpactPatterns = [
   /\bse confirma la ausencia de variaciones importantes\b/u,
 ];
 
-function normalizedText(entry: RawFeedEntry): string {
-  return `${entry.title} ${entry.summary ?? ""}`
+function normalizeText(text: string): string {
+  return text
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
@@ -29,14 +31,36 @@ function normalizedText(entry: RawFeedEntry): string {
     .trim();
 }
 
-function mayAffectSeaLevel(entry: RawFeedEntry): boolean {
-  const text = normalizedText(entry);
+function normalizedClauses(entry: RawFeedEntry): string[] {
+  return [entry.title, entry.summary ?? ""]
+    .map(normalizeText)
+    .flatMap((text) => text.split(/[.;:!?]+|\b(?:sin embargo|aunque|pero|no obstante|aun asi)\b/u))
+    .map((clause) => clause.trim())
+    .filter(Boolean);
+}
 
-  if (possibleImpactPatterns.some((pattern) => pattern.test(text))) {
+function withoutExplicitNoImpact(clause: string): string {
+  return explicitNoImpactPatterns.reduce((remaining, pattern) => {
+    let result = remaining;
+    while (pattern.test(result)) {
+      result = result.replace(pattern, " ");
+    }
+    return result;
+  }, clause);
+}
+
+function mayAffectSeaLevel(entry: RawFeedEntry): boolean {
+  const clauses = normalizedClauses(entry);
+
+  if (
+    clauses.some((clause) =>
+      possibleImpactPatterns.some((pattern) => pattern.test(withoutExplicitNoImpact(clause))),
+    )
+  ) {
     return true;
   }
 
-  return !explicitNoImpactPatterns.some((pattern) => pattern.test(text));
+  return !clauses.some((clause) => explicitNoImpactPatterns.some((pattern) => pattern.test(clause)));
 }
 
 export function filterSemarEntries(entries: RawFeedEntry[], fetchedAt: string): RawFeedEntry[] {
