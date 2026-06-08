@@ -1,5 +1,16 @@
 import type { RawFeedEntry } from "./feedTypes";
 
+function decodeNumericEntity(entity: string, code: string, radix: number): string {
+  const codePoint = Number.parseInt(code, radix);
+  const isUnicodeScalar =
+    Number.isSafeInteger(codePoint)
+    && codePoint >= 0
+    && codePoint <= 0x10ffff
+    && (codePoint < 0xd800 || codePoint > 0xdfff);
+
+  return isUnicodeScalar ? String.fromCodePoint(codePoint) : entity;
+}
+
 function decodeFeedEntities(value: string): string {
   return value
     .replace(/&nbsp;/g, " ")
@@ -9,8 +20,8 @@ function decodeFeedEntities(value: string): string {
     .replace(/&quot;/g, "\"")
     .replace(/&apos;/g, "'")
     .replace(/&#39;/g, "'")
-    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, code: string) => String.fromCodePoint(Number.parseInt(code, 16)));
+    .replace(/&#(\d+);/g, (entity, code: string) => decodeNumericEntity(entity, code, 10))
+    .replace(/&#x([0-9a-f]+);/gi, (entity, code: string) => decodeNumericEntity(entity, code, 16));
 }
 
 function stripFeedMarkup(value: string): string {
