@@ -1,6 +1,6 @@
 import type { FeedItem } from "./types";
 
-const maxAgeMs = 5 * 24 * 60 * 60 * 1000;
+const maxAgeMs = 24 * 60 * 60 * 1000;
 
 function itemTime(item: FeedItem): number {
   const parsed = Date.parse(item.publishedAt ?? item.fetchedAt);

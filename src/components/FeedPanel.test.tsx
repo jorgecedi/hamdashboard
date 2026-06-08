@@ -22,6 +22,55 @@ describe("FeedPanel", () => {
     expect(headings[0]).toBe("Huracán watch near Puerto Vallarta");
   });
 
+  it("renders SEMAR items before newer urgent non-SEMAR items", () => {
+    const semar: FeedItem = {
+      ...baseItem,
+      id: "semar",
+      sourceId: "semar-tsunami-alerts",
+      sourceName: "SEMAR Tsunami Alerts",
+      title: "SEMAR coastal current alert",
+      publishedAt: "2026-06-08T18:00:00Z",
+    };
+    const newerUrgent: FeedItem = {
+      ...baseItem,
+      id: "weather",
+      title: "Newer hurricane update",
+      publishedAt: "2026-06-08T19:00:00Z",
+    };
+
+    const { container } = render(<FeedPanel items={[newerUrgent, semar]} statuses={[]} />);
+
+    expect(within(container).getAllByRole("link").map((link) => link.textContent)).toEqual([
+      "SEMAR coastal current alert",
+      "Newer hurricane update",
+    ]);
+  });
+
+  it("renders multiple SEMAR items newest first using fetchedAt as a fallback", () => {
+    const older: FeedItem = {
+      ...baseItem,
+      id: "older",
+      sourceId: "semar-tsunami-alerts",
+      sourceName: "SEMAR Tsunami Alerts",
+      title: "Older SEMAR alert",
+      publishedAt: "2026-06-08T18:00:00Z",
+    };
+    const newer: FeedItem = {
+      ...older,
+      id: "newer",
+      title: "Newer SEMAR alert",
+      publishedAt: undefined,
+      fetchedAt: "2026-06-08T19:00:00Z",
+    };
+
+    const { container } = render(<FeedPanel items={[older, newer]} statuses={[]} />);
+
+    expect(within(container).getAllByRole("link").map((link) => link.textContent)).toEqual([
+      "Newer SEMAR alert",
+      "Older SEMAR alert",
+    ]);
+  });
+
   it("shows source errors", () => {
     render(<FeedPanel items={[]} statuses={[{ sourceId: "nhc", ok: false, fetchedAt: "2026-05-29T12:00:00Z", itemCount: 0, error: "HTTP 500" }]} />);
     expect(screen.getByText(/nhc: HTTP 500/i)).toBeInTheDocument();

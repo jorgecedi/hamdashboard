@@ -7,9 +7,35 @@ type FeedPanelProps = {
 };
 
 const urgencyOrder = { urgent: 0, watch: 1, normal: 2 };
+const semarSourceId = "semar-tsunami-alerts";
+
+function itemTime(item: FeedItem): number {
+  const publishedTime = item.publishedAt ? Date.parse(item.publishedAt) : Number.NaN;
+  if (Number.isFinite(publishedTime)) {
+    return publishedTime;
+  }
+
+  const fetchedTime = Date.parse(item.fetchedAt);
+  return Number.isFinite(fetchedTime) ? fetchedTime : 0;
+}
+
+function compareItems(a: FeedItem, b: FeedItem): number {
+  const aIsSemar = a.sourceId === semarSourceId;
+  const bIsSemar = b.sourceId === semarSourceId;
+
+  if (aIsSemar !== bIsSemar) {
+    return aIsSemar ? -1 : 1;
+  }
+
+  if (aIsSemar) {
+    return itemTime(b) - itemTime(a);
+  }
+
+  return urgencyOrder[a.urgency] - urgencyOrder[b.urgency];
+}
 
 export function FeedPanel({ items, statuses, staleSourceCount = 0 }: FeedPanelProps) {
-  const sorted = [...items].sort((a, b) => urgencyOrder[a.urgency] - urgencyOrder[b.urgency]);
+  const sorted = [...items].sort(compareItems);
   const errors = statuses.filter((status) => !status.ok);
 
   return (

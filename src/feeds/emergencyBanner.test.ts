@@ -17,11 +17,15 @@ const baseItem: FeedItem = {
 
 describe("selectEmergencyBannerItem", () => {
   it("returns a recent official emergency item", () => {
+    expect(selectEmergencyBannerItem([baseItem], new Date("2026-06-02T00:00:00Z"))?.id).toBe("1");
+  });
+
+  it("includes an official emergency item exactly 24 hours old", () => {
     expect(selectEmergencyBannerItem([baseItem], new Date("2026-06-02T12:00:00Z"))?.id).toBe("1");
   });
 
-  it("hides stale official emergency items older than five days", () => {
-    const stale = { ...baseItem, publishedAt: "2026-05-20T12:00:00Z" };
+  it("hides official emergency items older than 24 hours", () => {
+    const stale = { ...baseItem, publishedAt: "2026-06-01T11:59:59Z" };
 
     expect(selectEmergencyBannerItem([stale], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
   });
