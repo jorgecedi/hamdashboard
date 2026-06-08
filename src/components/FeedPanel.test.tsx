@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { FeedPanel } from "./FeedPanel";
 import type { FeedItem } from "../feeds/types";
 
+const NOW = Date.parse("2026-06-08T20:00:00Z");
+
 const baseItem: FeedItem = {
   id: "1",
   sourceId: "nhc",
@@ -46,7 +48,7 @@ describe("FeedPanel", () => {
     ]);
   });
 
-  it("renders multiple SEMAR items newest first using fetchedAt as a fallback", () => {
+  it("renders multiple eligible SEMAR items newest first", () => {
     const older: FeedItem = {
       ...baseItem,
       id: "older",
@@ -59,7 +61,7 @@ describe("FeedPanel", () => {
       ...older,
       id: "newer",
       title: "Newer SEMAR alert",
-      publishedAt: undefined,
+      publishedAt: "2026-06-08T19:00:00Z",
       fetchedAt: "2026-06-08T19:00:00Z",
     };
 
@@ -69,6 +71,67 @@ describe("FeedPanel", () => {
       "Newer SEMAR alert",
       "Older SEMAR alert",
     ]);
+  });
+
+  it("retains SEMAR items published exactly 24 hours ago", () => {
+    const semar: FeedItem = {
+      ...baseItem,
+      id: "semar-boundary",
+      sourceId: "semar-tsunami-alerts",
+      sourceName: "SEMAR Tsunami Alerts",
+      title: "Boundary SEMAR alert",
+      publishedAt: "2026-06-07T20:00:00Z",
+    };
+
+    const { container } = render(<FeedPanel items={[semar]} statuses={[]} now={NOW} />);
+    const view = within(container);
+
+    expect(view.getByRole("link", { name: "Boundary SEMAR alert" })).toBeInTheDocument();
+    expect(view.getByText("1 items")).toBeInTheDocument();
+  });
+
+  it("excludes stale, missing, invalid, and future SEMAR dates", () => {
+    const semar = {
+      ...baseItem,
+      sourceId: "semar-tsunami-alerts",
+      sourceName: "SEMAR Tsunami Alerts",
+    };
+    const items: FeedItem[] = [
+      { ...semar, id: "stale", title: "Stale SEMAR alert", publishedAt: "2026-06-07T19:59:59Z" },
+      { ...semar, id: "missing", title: "Missing-date SEMAR alert", publishedAt: undefined },
+      { ...semar, id: "invalid", title: "Invalid-date SEMAR alert", publishedAt: "not-a-date" },
+      { ...semar, id: "future", title: "Future SEMAR alert", publishedAt: "2026-06-08T20:00:01Z" },
+    ];
+
+    const { container } = render(<FeedPanel items={items} statuses={[]} now={NOW} />);
+    const view = within(container);
+
+    expect(view.queryAllByRole("link")).toHaveLength(0);
+    expect(view.getByText("0 items")).toBeInTheDocument();
+  });
+
+  it("preserves non-SEMAR items regardless of publication date and counts visible items", () => {
+    const staleSemar: FeedItem = {
+      ...baseItem,
+      id: "stale-semar",
+      sourceId: "semar-tsunami-alerts",
+      sourceName: "SEMAR Tsunami Alerts",
+      title: "Stale SEMAR alert",
+      publishedAt: "2026-06-07T19:59:59Z",
+    };
+    const nonSemar: FeedItem = {
+      ...baseItem,
+      id: "old-weather",
+      title: "Old weather update",
+      publishedAt: "2020-01-01T00:00:00Z",
+    };
+
+    const { container } = render(<FeedPanel items={[staleSemar, nonSemar]} statuses={[]} now={NOW} />);
+    const view = within(container);
+
+    expect(view.queryByRole("link", { name: "Stale SEMAR alert" })).not.toBeInTheDocument();
+    expect(view.getByRole("link", { name: "Old weather update" })).toBeInTheDocument();
+    expect(view.getByText("1 items")).toBeInTheDocument();
   });
 
   it("shows source errors", () => {

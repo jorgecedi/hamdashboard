@@ -4,10 +4,26 @@ type FeedPanelProps = {
   items: FeedItem[];
   statuses: FeedSourceStatus[];
   staleSourceCount?: number;
+  now?: number;
 };
 
 const urgencyOrder = { urgent: 0, watch: 1, normal: 2 };
 const semarSourceId = "semar-tsunami-alerts";
+const maxSemarAgeMs = 24 * 60 * 60 * 1000;
+
+export function isVisibleFeedItem(item: FeedItem, now: number): boolean {
+  if (item.sourceId !== semarSourceId) {
+    return true;
+  }
+
+  const publishedTime = item.publishedAt ? Date.parse(item.publishedAt) : Number.NaN;
+  if (!Number.isFinite(publishedTime)) {
+    return false;
+  }
+
+  const age = now - publishedTime;
+  return age >= 0 && age <= maxSemarAgeMs;
+}
 
 function itemTime(item: FeedItem): number {
   const publishedTime = item.publishedAt ? Date.parse(item.publishedAt) : Number.NaN;
@@ -34,15 +50,15 @@ function compareItems(a: FeedItem, b: FeedItem): number {
   return urgencyOrder[a.urgency] - urgencyOrder[b.urgency];
 }
 
-export function FeedPanel({ items, statuses, staleSourceCount = 0 }: FeedPanelProps) {
-  const sorted = [...items].sort(compareItems);
+export function FeedPanel({ items, statuses, staleSourceCount = 0, now = Date.now() }: FeedPanelProps) {
+  const sorted = items.filter((item) => isVisibleFeedItem(item, now)).sort(compareItems);
   const errors = statuses.filter((status) => !status.ok);
 
   return (
     <section className="feed-panel" aria-label="Emergency and news feed">
       <header className="panel-header">
         <h2>Emergency Feed</h2>
-        <span>{items.length} items</span>
+        <span>{sorted.length} items</span>
       </header>
       {errors.length > 0 || staleSourceCount > 0 ? (
         <div className="feed-notices">
