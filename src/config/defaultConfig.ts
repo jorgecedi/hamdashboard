@@ -262,7 +262,6 @@ export const defaultConfig: DashboardConfig = {
       enabled: true,
       sources: [
         { kind: "image", url: "https://webcamsdemexico.net/puertovallarta5/live.jpg" },
-        { kind: "image", url: "https://s90.ipcamlive.com/streams/5axrufacwmonk92ip/snapshot.jpg" },
       ],
     },
     {
