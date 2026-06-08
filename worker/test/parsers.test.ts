@@ -52,6 +52,19 @@ describe("parseXmlFeed", () => {
       },
     ]);
   });
+
+  it("normalizes entity-escaped HTML in SEMAR descriptions", () => {
+    const xml = `<rss><channel><item><title>Boletin informativo</title><link>https://diredimoat.semar.gob.mx/alerta</link><description>&lt;strong&gt;EVALUACION:&lt;/strong&gt;&lt;br /&gt;Se pueden producir variaciones de pocos centimetros.</description><pubDate>Mon, 08 Jun 2026 12:00:00 GMT</pubDate></item></channel></rss>`;
+
+    expect(parseXmlFeed(xml)).toEqual([
+      {
+        title: "Boletin informativo",
+        url: "https://diredimoat.semar.gob.mx/alerta",
+        summary: "EVALUACION: Se pueden producir variaciones de pocos centimetros.",
+        publishedAt: "Mon, 08 Jun 2026 12:00:00 GMT",
+      },
+    ]);
+  });
 });
 
 describe("parseJsonFeed", () => {

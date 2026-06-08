@@ -1,11 +1,7 @@
 import type { RawFeedEntry } from "./feedTypes";
 
-function normalizeFeedText(value: string): string {
+function decodeFeedEntities(value: string): string {
   return value
-    .replace(/<!\[CDATA\[|\]\]>/g, "")
-    .replace(/<br\s*\/?>/gi, " ")
-    .replace(/<\/p\s*>/gi, " ")
-    .replace(/<[^>]*>/g, "")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
@@ -14,7 +10,21 @@ function normalizeFeedText(value: string): string {
     .replace(/&apos;/g, "'")
     .replace(/&#39;/g, "'")
     .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, code: string) => String.fromCodePoint(Number.parseInt(code, 16)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code: string) => String.fromCodePoint(Number.parseInt(code, 16)));
+}
+
+function stripFeedMarkup(value: string): string {
+  return value
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<\/p\s*>/gi, " ")
+    .replace(/<[^>]*>/g, "");
+}
+
+function normalizeFeedText(value: string): string {
+  const withoutCdata = value.replace(/<!\[CDATA\[|\]\]>/g, "");
+  const decoded = decodeFeedEntities(decodeFeedEntities(withoutCdata));
+
+  return stripFeedMarkup(decoded)
     .replace(/\s+/g, " ")
     .trim();
 }
