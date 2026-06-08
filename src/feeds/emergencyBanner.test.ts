@@ -36,6 +36,30 @@ describe("selectEmergencyBannerItem", () => {
     expect(selectEmergencyBannerItem([future], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
   });
 
+  it("hides SEMAR items missing publishedAt", () => {
+    const missingDate = { ...baseItem, publishedAt: undefined };
+
+    expect(selectEmergencyBannerItem([missingDate], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
+  });
+
+  it("hides SEMAR items with invalid publishedAt", () => {
+    const invalidDate = { ...baseItem, publishedAt: "not-a-date" };
+
+    expect(selectEmergencyBannerItem([invalidDate], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
+  });
+
+  it("uses fetchedAt for non-SEMAR items missing publishedAt", () => {
+    const weather: FeedItem = {
+      ...baseItem,
+      sourceId: "nhc-epac-es",
+      sourceName: "NHC Eastern Pacific Spanish",
+      publishedAt: undefined,
+      fetchedAt: "2026-06-02T10:00:00Z",
+    };
+
+    expect(selectEmergencyBannerItem([weather], new Date("2026-06-02T12:00:00Z"))?.id).toBe("1");
+  });
+
   it("hides non-official emergency items", () => {
     const unofficial = { ...baseItem, tags: ["local"] };
 

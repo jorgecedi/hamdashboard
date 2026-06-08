@@ -3,7 +3,9 @@ import type { FeedItem } from "./types";
 const maxAgeMs = 24 * 60 * 60 * 1000;
 
 function itemTime(item: FeedItem): number {
-  const parsed = Date.parse(item.publishedAt ?? item.fetchedAt);
+  const timestamp =
+    item.sourceId === "semar-tsunami-alerts" ? item.publishedAt : (item.publishedAt ?? item.fetchedAt);
+  const parsed = Date.parse(timestamp ?? "");
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
