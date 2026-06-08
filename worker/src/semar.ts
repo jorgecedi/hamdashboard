@@ -10,10 +10,11 @@ const possibleImpactPatterns = [
   /\bposible presencia de corrientes\b/u,
   /\bcorrientes? en la entrada de (?:los )?puertos?\b/u,
   /\b(?:oleaje|ondas?|nivel del mar) (?:peligroso|anormal|elevado)\b/u,
-  /\b(?:alerta|aviso|evacuacion|precauciones?)\b/u,
+  /\b(?:evacuacion|precauciones?)\b/u,
 ];
 const explicitNoImpactPatterns = [
-  /\bno se esperan? variaciones(?: importantes)? (?:en|del) nivel del mar\b/u,
+  /\bno se esperan? variaciones(?: importantes)? (?:en el|del) nivel del mar\b/u,
+  /\bno se esperan? (?:la )?generacion(?:es)? de variaciones (?:en el|del) nivel del mar\b/u,
   /\bno se espera la generacion de un tsunami\b/u,
   /\bse descarta el arribo de un tsunami\b/u,
   /\bse confirma la ausencia de variaciones importantes\b/u,

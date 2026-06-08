@@ -53,11 +53,23 @@ describe("filterSemarEntries dates", () => {
 describe("filterSemarEntries impact", () => {
   it.each([
     "NO se esperan variaciones del nivel del mar por la ubicacion del epicentro.",
+    "NO se esperan variaciones en el nivel del mar.",
+    "NO se espera la generacion de variaciones del nivel del mar.",
+    "NO se esperan generaciones de variaciones en el nivel del mar.",
     "NO se espera la generacion de un tsunami para las costas de Mexico.",
     "Se descarta el arribo de un tsunami para las costas de Mexico.",
     "Se confirma la ausencia de variaciones importantes en el nivel del mar.",
   ])("discards explicit no-impact wording: %s", (summary) => {
     expect(filterSemarEntries([entry(summary, recentPublishedAt)], fetchedAt)).toEqual([]);
+  });
+
+  it("discards a realistic no-impact bulletin containing SEMAR source boilerplate", () => {
+    const item = entry(
+      "Aviso del Centro de Alerta de Tsunamis: se descarta el arribo de un tsunami para las costas de Mexico.",
+      recentPublishedAt,
+    );
+
+    expect(filterSemarEntries([item], fetchedAt)).toEqual([]);
   });
 
   it.each([
@@ -80,6 +92,15 @@ describe("filterSemarEntries impact", () => {
   it("keeps positive impact wording even when the title contains a negative statement", () => {
     const item = entry("Posible presencia de corrientes en la entrada de los puertos.", recentPublishedAt);
     item.title = "No se espera la generación de un tsunami";
+
+    expect(filterSemarEntries([item], fetchedAt)).toHaveLength(1);
+  });
+
+  it("keeps concrete positive impact after the live no-variation wording", () => {
+    const item = entry(
+      "NO se espera la generacion de variaciones del nivel del mar; sin embargo, se recomienda mantener precauciones por corrientes en la entrada de los puertos.",
+      recentPublishedAt,
+    );
 
     expect(filterSemarEntries([item], fetchedAt)).toHaveLength(1);
   });
