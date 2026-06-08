@@ -272,7 +272,7 @@ export const defaultConfig: DashboardConfig = {
       refreshSeconds: 600,
       enabled: true,
       sources: [
-        { kind: "image", url: "https://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png" },
+        { kind: "image", url: "https://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png" },
         { kind: "image", url: "https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png" },
       ],
     },
