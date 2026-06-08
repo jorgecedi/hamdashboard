@@ -24,6 +24,17 @@ const localNewsSource: WorkerFeedSource = {
   tags: ["local", "news"],
 };
 
+const semarSource: WorkerFeedSource = {
+  id: "semar-tsunami-alerts",
+  name: "SEMAR Tsunami Alerts",
+  category: "emergency",
+  kind: "rss",
+  url: "https://diredimoat.semar.gob.mx/cat/rss/rss_feed.xml",
+  priority: 10,
+  enabled: true,
+  tags: ["official", "mexico", "tsunami"],
+};
+
 describe("normalizeEntry urgency", () => {
   it("removes the NOAA Spanish machine translation disclaimer from summaries", () => {
     const item = normalizeEntry(
@@ -74,6 +85,20 @@ describe("normalizeEntry urgency", () => {
       },
       localNewsSource,
       "2026-05-29T12:00:00Z",
+    );
+
+    expect(item.urgency).toBe("urgent");
+  });
+
+  it("always marks retained SEMAR entries urgent", () => {
+    const item = normalizeEntry(
+      {
+        title: "Boletín informativo",
+        summary: "Se pueden producir variaciones de pocos centímetros.",
+        url: "https://example.com/semar/informative",
+      },
+      semarSource,
+      "2026-06-08T12:00:00Z",
     );
 
     expect(item.urgency).toBe("urgent");

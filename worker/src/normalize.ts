@@ -1,5 +1,6 @@
 import { urgencyKeywords } from "./config";
 import type { FeedItem, RawFeedEntry, Urgency, WorkerFeedSource } from "./feedTypes";
+import { isSemarSource } from "./semar";
 
 const locationKeywords = ["puerto vallarta", "jalisco"];
 const noaaSpanishTranslationDisclaimer =
@@ -10,6 +11,8 @@ function normalizeText(value: string): string {
 }
 
 function scoreUrgency(entry: RawFeedEntry, source: WorkerFeedSource): Urgency {
+  if (isSemarSource(source.id)) return "urgent";
+
   const haystack = normalizeText(`${entry.title} ${entry.summary ?? ""}`);
   const official = source.tags.includes("official");
   const normalizedLocationKeywords = new Set(locationKeywords.map((keyword) => normalizeText(keyword)));
