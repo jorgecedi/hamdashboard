@@ -33,6 +33,7 @@ export function Tile({ tile }: TileProps) {
   }
 
   useEffect(() => {
+    if (expanded) return;
     if (tile.sources.length === 0 || tile.refreshSeconds <= 0) return;
     if (tile.sources.length <= 1 && source?.kind !== "image") return;
 
@@ -41,7 +42,7 @@ export function Tile({ tile }: TileProps) {
     }, tile.refreshSeconds * 1000);
 
     return () => window.clearInterval(interval);
-  }, [source?.kind, tile.refreshSeconds, tile.sources.length]);
+  }, [expanded, source?.kind, tile.refreshSeconds, tile.sources.length]);
 
   if (!source) return null;
   const tileClassName = ["tile", expanded ? "tile-expanded" : "", expanded && source.kind === "image" ? "tile-expanded-image" : ""]

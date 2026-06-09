@@ -92,6 +92,58 @@ describe("Tile", () => {
     expect(screen.getByAltText("Cams")).toHaveAttribute("src", expect.stringContaining("two.jpg"));
   });
 
+  it("pauses automatic source rotation while fullscreen", () => {
+    vi.useFakeTimers();
+    render(<Tile tile={{ ...tile, refreshSeconds: 5 }} />);
+
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    fireEvent.click(screen.getByRole("button", { name: /expand tile/i }));
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(screen.getByRole("article")).toHaveClass("tile-expanded");
+    expect(screen.getByAltText("Cams")).toHaveAttribute("src", expect.stringContaining("one.jpg"));
+  });
+
+  it("allows manual source rotation while fullscreen", () => {
+    vi.useFakeTimers();
+    render(<Tile tile={{ ...tile, refreshSeconds: 5 }} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /expand tile/i }));
+    fireEvent.click(screen.getByRole("button", { name: /next source/i }));
+
+    expect(screen.getByRole("article")).toHaveClass("tile-expanded");
+    expect(screen.getByAltText("Cams")).toHaveAttribute("src", expect.stringContaining("two.jpg"));
+  });
+
+  it("starts a fresh automatic rotation interval after exiting fullscreen", () => {
+    vi.useFakeTimers();
+    render(<Tile tile={{ ...tile, refreshSeconds: 5 }} />);
+
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    fireEvent.click(screen.getByRole("button", { name: /expand tile/i }));
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+    fireEvent.click(screen.getByRole("button", { name: /expand tile/i }));
+
+    act(() => {
+      vi.advanceTimersByTime(4999);
+    });
+    expect(screen.getByAltText("Cams")).toHaveAttribute("src", expect.stringContaining("one.jpg"));
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(screen.getByAltText("Cams")).toHaveAttribute("src", expect.stringContaining("two.jpg"));
+  });
+
   it("refreshes cache-busted image URLs for single-source image tiles", () => {
     vi.useFakeTimers();
     render(<Tile tile={{ ...tile, sources: [{ kind: "image", url: "https://example.com/only.jpg" }], refreshSeconds: 5 }} />);
@@ -107,5 +159,19 @@ describe("Tile", () => {
     expect(firstSrc).toContain("only.jpg");
     expect(secondSrc).toContain("only.jpg");
     expect(secondSrc).not.toBe(firstSrc);
+  });
+
+  it("pauses automatic cache refreshes for single-source images while fullscreen", () => {
+    vi.useFakeTimers();
+    render(<Tile tile={{ ...tile, sources: [{ kind: "image", url: "https://example.com/only.jpg" }], refreshSeconds: 5 }} />);
+
+    const firstSrc = screen.getByAltText("Cams").getAttribute("src");
+    fireEvent.click(screen.getByRole("button", { name: /expand tile/i }));
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(screen.getByAltText("Cams")).toHaveAttribute("src", firstSrc);
   });
 });

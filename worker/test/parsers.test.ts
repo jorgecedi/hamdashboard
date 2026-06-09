@@ -52,6 +52,31 @@ describe("parseXmlFeed", () => {
       },
     ]);
   });
+
+  it("normalizes double-escaped HTML in SEMAR descriptions", () => {
+    const xml = `<rss><channel><item><title>Boletin informativo</title><link>https://diredimoat.semar.gob.mx/alerta</link><description>&amp;lt;strong&amp;gt;EVALUACION:&amp;lt;/strong&amp;gt;&amp;lt;br /&amp;gt;Se pueden producir variaciones de pocos centimetros.</description><pubDate>Mon, 08 Jun 2026 12:00:00 GMT</pubDate></item></channel></rss>`;
+
+    expect(parseXmlFeed(xml)).toEqual([
+      {
+        title: "Boletin informativo",
+        url: "https://diredimoat.semar.gob.mx/alerta",
+        summary: "EVALUACION: Se pueden producir variaciones de pocos centimetros.",
+        publishedAt: "Mon, 08 Jun 2026 12:00:00 GMT",
+      },
+    ]);
+  });
+
+  it("preserves malformed and out-of-range numeric entities", () => {
+    const xml = `<rss><channel><item><title>Entity test</title><link>https://example.com/entities</link><description>Decimal &#12oops; &#1114112; hex &#xZZ; &#x110000;</description></item></channel></rss>`;
+
+    expect(parseXmlFeed(xml)).toEqual([
+      {
+        title: "Entity test",
+        url: "https://example.com/entities",
+        summary: "Decimal &#12oops; &#1114112; hex &#xZZ; &#x110000;",
+      },
+    ]);
+  });
 });
 
 describe("parseJsonFeed", () => {

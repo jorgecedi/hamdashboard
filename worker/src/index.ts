@@ -2,15 +2,13 @@ import { workerFeedSources } from "./config";
 import type { FeedResponse, FeedSourceStatus, RawFeedEntry, WorkerFeedSource } from "./feedTypes";
 import { normalizeEntry } from "./normalize";
 import { fetchRawEntries } from "./providers";
+import { filterSemarEntries, isSemarSource } from "./semar";
 
 type Env = {
   CACHE_SECONDS?: string;
 };
 
 const DEFAULT_CACHE_SECONDS = 180;
-const SEMAR_TSUNAMI_SOURCE_ID = "semar-tsunami-alerts";
-const SEMAR_TSUNAMI_MAX_AGE_DAYS = 5;
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 function cacheSeconds(env: Env): number {
   const parsed = Number(env.CACHE_SECONDS ?? DEFAULT_CACHE_SECONDS);
@@ -65,18 +63,7 @@ function entrySortTime(entry: { publishedAt?: string; fetchedAt?: string }): num
 }
 
 function filterSourceEntries(source: WorkerFeedSource, entries: RawFeedEntry[], fetchedAt: string): RawFeedEntry[] {
-  if (source.id !== SEMAR_TSUNAMI_SOURCE_ID) {
-    return entries;
-  }
-
-  const newestEntryTime = Math.max(...entries.map((entry) => entrySortTime({ ...entry, fetchedAt })));
-  const fetchedTime = Date.parse(fetchedAt);
-
-  if (!Number.isFinite(newestEntryTime) || !Number.isFinite(fetchedTime)) {
-    return [];
-  }
-
-  return fetchedTime - newestEntryTime <= SEMAR_TSUNAMI_MAX_AGE_DAYS * DAY_MS ? entries : [];
+  return isSemarSource(source.id) ? filterSemarEntries(entries, fetchedAt) : entries;
 }
 
 function itemSortTime(item: { publishedAt?: string; fetchedAt: string }): number {
@@ -84,7 +71,7 @@ function itemSortTime(item: { publishedAt?: string; fetchedAt: string }): number
 }
 
 function sourceSortPriority(item: { sourceId: string }): number {
-  return item.sourceId === SEMAR_TSUNAMI_SOURCE_ID ? 1 : 0;
+  return isSemarSource(item.sourceId) ? 1 : 0;
 }
 
 async function feedsResponse(sourceId: string | undefined, env: Env): Promise<Response> {

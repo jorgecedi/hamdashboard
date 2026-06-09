@@ -17,11 +17,15 @@ const baseItem: FeedItem = {
 
 describe("selectEmergencyBannerItem", () => {
   it("returns a recent official emergency item", () => {
+    expect(selectEmergencyBannerItem([baseItem], new Date("2026-06-02T00:00:00Z"))?.id).toBe("1");
+  });
+
+  it("includes an official emergency item exactly 24 hours old", () => {
     expect(selectEmergencyBannerItem([baseItem], new Date("2026-06-02T12:00:00Z"))?.id).toBe("1");
   });
 
-  it("hides stale official emergency items older than five days", () => {
-    const stale = { ...baseItem, publishedAt: "2026-05-20T12:00:00Z" };
+  it("hides official emergency items older than 24 hours", () => {
+    const stale = { ...baseItem, publishedAt: "2026-06-01T11:59:59Z" };
 
     expect(selectEmergencyBannerItem([stale], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
   });
@@ -30,6 +34,30 @@ describe("selectEmergencyBannerItem", () => {
     const future = { ...baseItem, publishedAt: "2026-06-10T12:00:00Z" };
 
     expect(selectEmergencyBannerItem([future], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
+  });
+
+  it("hides SEMAR items missing publishedAt", () => {
+    const missingDate = { ...baseItem, publishedAt: undefined };
+
+    expect(selectEmergencyBannerItem([missingDate], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
+  });
+
+  it("hides SEMAR items with invalid publishedAt", () => {
+    const invalidDate = { ...baseItem, publishedAt: "not-a-date" };
+
+    expect(selectEmergencyBannerItem([invalidDate], new Date("2026-06-02T12:00:00Z"))).toBeUndefined();
+  });
+
+  it("uses fetchedAt for non-SEMAR items missing publishedAt", () => {
+    const weather: FeedItem = {
+      ...baseItem,
+      sourceId: "nhc-epac-es",
+      sourceName: "NHC Eastern Pacific Spanish",
+      publishedAt: undefined,
+      fetchedAt: "2026-06-02T10:00:00Z",
+    };
+
+    expect(selectEmergencyBannerItem([weather], new Date("2026-06-02T12:00:00Z"))?.id).toBe("1");
   });
 
   it("hides non-official emergency items", () => {

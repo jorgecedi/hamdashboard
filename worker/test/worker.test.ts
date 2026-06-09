@@ -1,11 +1,18 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/index";
 
-const daysAgo = (days: number) => new Date(Date.now() - days * 24 * 60 * 60 * 1000).toUTCString();
+const NOW = new Date("2026-06-08T12:00:00Z");
+const hoursAgo = (hours: number) => new Date(NOW.getTime() - hours * 60 * 60 * 1000).toUTCString();
 
 describe("worker", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(NOW);
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   it("returns health", async () => {
@@ -70,11 +77,35 @@ describe("worker", () => {
     ]);
   });
 
-  it("serves the SEMAR tsunami alerts as a dedicated feed source", async () => {
+  it("filters SEMAR entries individually and retains plain-text possible-impact alerts", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => new Response(
-        `<rss><channel><item><title>Alerta de tsunami</title><link>https://example.com/tsunami</link><description>Boletin informativo</description><pubDate>${daysAgo(1)}</pubDate></item></channel></rss>`,
+        `<rss><channel>
+          <item>
+            <title>Boletín con posibles variaciones</title>
+            <link>https://example.com/tsunami/retained</link>
+            <description>&amp;lt;p&amp;gt;Se pueden producir &amp;lt;strong&amp;gt;variaciones de pocos centímetros&amp;lt;/strong&amp;gt;.&amp;lt;/p&amp;gt;</description>
+            <pubDate>${hoursAgo(2)}</pubDate>
+          </item>
+          <item>
+            <title>Boletín sin afectación</title>
+            <link>https://example.com/tsunami/no-impact</link>
+            <description>No se esperan variaciones del nivel del mar.</description>
+            <pubDate>${hoursAgo(1)}</pubDate>
+          </item>
+          <item>
+            <title>Boletín antiguo</title>
+            <link>https://example.com/tsunami/old</link>
+            <description>Se pueden producir variaciones del nivel del mar.</description>
+            <pubDate>${hoursAgo(25)}</pubDate>
+          </item>
+          <item>
+            <title>Boletín sin fecha</title>
+            <link>https://example.com/tsunami/missing-date</link>
+            <description>Se pueden producir variaciones del nivel del mar.</description>
+          </item>
+        </channel></rss>`,
         { status: 200 },
       )),
     );
@@ -88,48 +119,34 @@ describe("worker", () => {
     ]);
     expect(payload.items).toEqual([
       expect.objectContaining({
-        id: "semar-tsunami-alerts:https://example.com/tsunami",
+        id: "semar-tsunami-alerts:https://example.com/tsunami/retained",
         sourceId: "semar-tsunami-alerts",
         sourceName: "SEMAR Tsunami Alerts",
         category: "emergency",
+        summary: "Se pueden producir variaciones de pocos centímetros.",
+        urgency: "urgent",
         tags: ["official", "mexico", "tsunami"],
       }),
     ]);
   });
 
-  it("hides SEMAR tsunami alerts when the newest entry is older than five days", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response(
-        `<rss><channel><item><title>Alerta antigua</title><link>https://example.com/old-tsunami</link><description>Boletin antiguo</description><pubDate>${daysAgo(6)}</pubDate></item></channel></rss>`,
-        { status: 200 },
-      )),
-    );
-
-    const response = await worker.fetch(new Request("https://feeds.example.test/api/feeds/semar-tsunami-alerts"), {});
-    const payload = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(payload.statuses).toEqual([
-      expect.objectContaining({ sourceId: "semar-tsunami-alerts", ok: true, itemCount: 0 }),
-    ]);
-    expect(payload.items).toEqual([]);
-  });
-
-  it("sorts fresh SEMAR tsunami alerts before other feed items", async () => {
+  it("sorts all retained SEMAR items first and newest SEMAR first", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async (url: string | URL | Request) => {
         const requestedUrl = String(url);
         if (requestedUrl.includes("rss_feed.xml")) {
           return new Response(
-            `<rss><channel><item><title>Alerta SEMAR vigente</title><link>https://example.com/current-tsunami</link><description>Boletin vigente</description><pubDate>${daysAgo(1)}</pubDate></item></channel></rss>`,
+            `<rss><channel>
+              <item><title>SEMAR más antigua</title><link>https://example.com/semar/older</link><description>Se pueden producir variaciones.</description><pubDate>${hoursAgo(3)}</pubDate></item>
+              <item><title>SEMAR más reciente</title><link>https://example.com/semar/newer</link><description>Se esperan variaciones del nivel del mar.</description><pubDate>${hoursAgo(2)}</pubDate></item>
+            </channel></rss>`,
             { status: 200 },
           );
         }
 
         return new Response(
-          `<rss><channel><item><title>Noticia mas reciente</title><link>https://example.com/newer-weather</link><description>Actualizacion general</description><pubDate>${daysAgo(0.5)}</pubDate></item></channel></rss>`,
+          `<rss><channel><item><title>Noticia más reciente</title><link>https://example.com/newer-weather</link><description>Actualización general</description><pubDate>${hoursAgo(1)}</pubDate></item></channel></rss>`,
           { status: 200 },
         );
       }),
@@ -139,11 +156,11 @@ describe("worker", () => {
     const payload = await response.json();
 
     expect(response.status).toBe(200);
-    expect(payload.items[0]).toEqual(
-      expect.objectContaining({
-        sourceId: "semar-tsunami-alerts",
-        title: "Alerta SEMAR vigente",
-      }),
-    );
+    expect(payload.items.map((item: { title: string }) => item.title)).toEqual([
+      "SEMAR más reciente",
+      "SEMAR más antigua",
+      "Noticia más reciente",
+      "Noticia más reciente",
+    ]);
   });
 });
