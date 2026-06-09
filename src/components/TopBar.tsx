@@ -32,10 +32,7 @@ export function TopBar({ config, emergencyLinksOpen, emergencyLinksToggleRef, on
 
   return (
     <header className="top-bar">
-      <span className="top-bar-time">{localTime}</span>
-      <strong>{config.site.callSign}</strong>
-      <div className="top-bar-actions">
-        <span>{utcTime}</span>
+      <div className="top-bar-left">
         <button
           ref={emergencyLinksToggleRef}
           type="button"
@@ -47,6 +44,11 @@ export function TopBar({ config, emergencyLinksOpen, emergencyLinksToggleRef, on
         >
           <Menu aria-hidden="true" size={18} />
         </button>
+        <span className="top-bar-time">{localTime}</span>
+      </div>
+      <strong>{config.site.callSign}</strong>
+      <div className="top-bar-actions">
+        <span>{utcTime}</span>
       </div>
     </header>
   );

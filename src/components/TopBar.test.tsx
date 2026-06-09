@@ -28,6 +28,20 @@ describe("TopBar", () => {
     expect(screen.getByRole("button", { name: /close emergency links/i })).toHaveAttribute("aria-expanded", "true");
   });
 
+  it("renders the emergency links button before local time in the left section", () => {
+    const { container } = render(
+      <TopBar config={defaultConfig} emergencyLinksOpen={false} onToggleEmergencyLinks={vi.fn()} />,
+    );
+
+    const leftSection = container.querySelector<HTMLElement>(".top-bar-left");
+    const button = screen.getByRole("button", { name: /open emergency links/i });
+    const localTime = container.querySelector<HTMLElement>(".top-bar-time");
+
+    expect(leftSection).toContainElement(button);
+    expect(leftSection).toContainElement(localTime);
+    expect(button.compareDocumentPosition(localTime as Node) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("updates the displayed time every second", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-03T12:00:00Z"));

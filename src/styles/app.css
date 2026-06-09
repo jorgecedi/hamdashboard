@@ -210,6 +210,13 @@ body {
   border: 1px solid #2b3948;
 }
 
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
 .top-bar-actions {
   display: flex;
   align-items: center;
