@@ -58,6 +58,8 @@ describe("filterSemarEntries impact", () => {
     "NO se esperan generaciones de variaciones en el nivel del mar.",
     "NO se pueden producir variaciones del nivel del mar.",
     "NO se esperan variaciones de pocos centimetros.",
+    "No se requieren precauciones porque no se esperan variaciones del nivel del mar.",
+    "No se espera la generacion de variaciones de pocos centimetros.",
     "NO se espera la generacion de un tsunami para las costas de Mexico.",
     "Se descarta el arribo de un tsunami para las costas de Mexico.",
     "Se confirma la ausencia de variaciones importantes en el nivel del mar.",
@@ -76,6 +78,7 @@ describe("filterSemarEntries impact", () => {
 
   it.each([
     "NO SE ESPERA LA GENERACION DE UN TSUNAMI; sin embargo, se pueden producir variaciones de pocos centimetros.",
+    "No se espera la generacion de un tsunami; sin embargo, podrian presentarse corrientes fuertes en zonas costeras.",
     "Mantener precauciones por la posible presencia de corrientes en la entrada de los puertos.",
     "Se esperan variaciones del nivel del mar.",
     "Se reporta oleaje anormal en la costa.",

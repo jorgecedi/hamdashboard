@@ -5,18 +5,20 @@ export const SEMAR_TSUNAMI_SOURCE_ID = "semar-tsunami-alerts";
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const possibleImpactPatterns = [
   /\bse pueden producir variaciones\b/u,
-  /(?<!\bno )\bse esperan? variaciones\b/u,
-  /\bvariaciones de pocos centimetros\b/u,
+  /\bse esperan? variaciones\b/u,
+  /\bpodrian? (?:producirse|presentarse) (?:variaciones|corrientes?)\b/u,
   /\bposible presencia de corrientes\b/u,
-  /\bcorrientes? en la entrada de (?:los )?puertos?\b/u,
+  /\b(?:mantener|tomar) precauciones\b/u,
+  /\bse recomienda(?: mantener)? precauciones\b/u,
+  /\bcorrientes? (?:fuertes )?(?:en|para) (?:zonas? costeras?|la entrada de (?:los )?puertos?)\b/u,
   /\b(?:oleaje|ondas?|nivel del mar) (?:peligroso|anormal|elevado)\b/u,
-  /\b(?:evacuacion|precauciones?)\b/u,
+  /\b(?:aviso|orden|recomendacion) de evacuacion\b/u,
 ];
 const explicitNoImpactPatterns = [
   /\bno se pueden producir variaciones(?: de pocos centimetros)?(?: (?:en el|del) nivel del mar)?\b/u,
   /\bno se esperan? variaciones de pocos centimetros(?: (?:en el|del) nivel del mar)?\b/u,
   /\bno se esperan? variaciones(?: importantes)? (?:en el|del) nivel del mar\b/u,
-  /\bno se esperan? (?:la )?generacion(?:es)? de variaciones (?:en el|del) nivel del mar\b/u,
+  /\bno se esperan? (?:la )?generacion(?:es)? de variaciones(?: de pocos centimetros)?(?: (?:en el|del) nivel del mar)?\b/u,
   /\bno se espera la generacion de un tsunami\b/u,
   /\bse descarta el arribo de un tsunami\b/u,
   /\bse confirma la ausencia de variaciones importantes\b/u,
@@ -34,33 +36,23 @@ function normalizeText(text: string): string {
 function normalizedClauses(entry: RawFeedEntry): string[] {
   return [entry.title, entry.summary ?? ""]
     .map(normalizeText)
-    .flatMap((text) => text.split(/[.;:!?]+|\b(?:sin embargo|aunque|pero|no obstante|aun asi)\b/u))
+    .flatMap((text) => text.split(/[.,;:!?]+|\b(?:sin embargo|aunque|pero|no obstante|aun asi)\b/u))
     .map((clause) => clause.trim())
     .filter(Boolean);
 }
 
-function withoutExplicitNoImpact(clause: string): string {
-  return explicitNoImpactPatterns.reduce((remaining, pattern) => {
-    let result = remaining;
-    while (pattern.test(result)) {
-      result = result.replace(pattern, " ");
-    }
-    return result;
-  }, clause);
-}
-
 function mayAffectSeaLevel(entry: RawFeedEntry): boolean {
   const clauses = normalizedClauses(entry);
+  const classified = clauses.map((clause) => ({
+    hasImpact: possibleImpactPatterns.some((pattern) => pattern.test(clause)),
+    hasNoImpact: explicitNoImpactPatterns.some((pattern) => pattern.test(clause)),
+  }));
 
-  if (
-    clauses.some((clause) =>
-      possibleImpactPatterns.some((pattern) => pattern.test(withoutExplicitNoImpact(clause))),
-    )
-  ) {
+  if (classified.some(({ hasImpact, hasNoImpact }) => hasImpact && !hasNoImpact)) {
     return true;
   }
 
-  return !clauses.some((clause) => explicitNoImpactPatterns.some((pattern) => pattern.test(clause)));
+  return !classified.some(({ hasNoImpact }) => hasNoImpact);
 }
 
 export function filterSemarEntries(entries: RawFeedEntry[], fetchedAt: string): RawFeedEntry[] {
